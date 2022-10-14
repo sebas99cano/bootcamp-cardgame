@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/applications/app-command/app-command.iml" filepath="$PROJECT_DIR$/applications/app-command/app-command.iml" />
+      <module fileurl="file://$PROJECT_DIR$/applications/app-proxy/app-proxy.iml" filepath="$PROJECT_DIR$/applications/app-proxy/app-proxy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/applications/app-queries/app-queries.iml" filepath="$PROJECT_DIR$/applications/app-queries/app-queries.iml" />
+      <module fileurl="file://$PROJECT_DIR$/applications/applications.iml" filepath="$PROJECT_DIR$/applications/applications.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/backend.iml" filepath="$PROJECT_DIR$/.idea/backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/business/business.iml" filepath="$PROJECT_DIR$/business/business.iml" />
+      <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" />
+    </modules>
+  </component>
+</project>

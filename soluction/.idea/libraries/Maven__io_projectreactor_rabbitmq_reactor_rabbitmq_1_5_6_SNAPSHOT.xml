@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.projectreactor.rabbitmq:reactor-rabbitmq:1.5.6-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/projectreactor/rabbitmq/reactor-rabbitmq/1.5.6-SNAPSHOT/reactor-rabbitmq-1.5.6-20220614.134228-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/io/projectreactor/rabbitmq/reactor-rabbitmq/1.5.6-SNAPSHOT/reactor-rabbitmq-1.5.6-20220614.134228-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/projectreactor/rabbitmq/reactor-rabbitmq/1.5.6-SNAPSHOT/reactor-rabbitmq-1.5.6-20220614.134228-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

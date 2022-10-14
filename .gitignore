@@ -1,0 +1,13 @@
+backend/domain/target/
+backend/business/target/
+backend/applications/target/
+
+/.idea/
+frontend/web/.angular/
+frontend/web/.firebase/
+
+backend/cardgame.iml
+backend/applications/app-proxy/app-proxy.iml
+backend/applications/app-service/app-service.iml
+backend/applications/applications.iml
+backend/domain/domain.iml
