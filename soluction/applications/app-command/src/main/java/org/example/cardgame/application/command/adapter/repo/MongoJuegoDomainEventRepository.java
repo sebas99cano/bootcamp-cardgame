@@ -1,7 +1,8 @@
 package org.example.cardgame.application.command.adapter.repo;
 
-import co.com.sofka.domain.generic.DomainEvent;
-import org.example.cardgame.application.command.generic.EventStoreRepository;
+import org.example.cardgame.application.command.ApplicationConfig;
+import org.example.cardgame.generic.EventStoreRepository;
+import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.usecase.gateway.JuegoDomainEventRepository;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -17,6 +18,6 @@ public class MongoJuegoDomainEventRepository implements JuegoDomainEventReposito
 
     @Override
     public Flux<DomainEvent> obtenerEventosPor(String id) {
-        return repository.getEventsBy("game", id);
+        return repository.getEventsBy(ApplicationConfig.STORE_NAME, id);
     }
 }

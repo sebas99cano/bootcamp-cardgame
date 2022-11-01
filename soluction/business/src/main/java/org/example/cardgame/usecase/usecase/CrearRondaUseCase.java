@@ -1,11 +1,13 @@
 package org.example.cardgame.usecase.usecase;
 
-import co.com.sofka.domain.generic.DomainEvent;
 import org.example.cardgame.domain.Juego;
 import org.example.cardgame.domain.command.CrearRondaCommand;
 import org.example.cardgame.domain.values.JuegoId;
 import org.example.cardgame.domain.values.JugadorId;
 import org.example.cardgame.domain.values.Ronda;
+import org.example.cardgame.domain.values.TiempoLimite;
+import org.example.cardgame.generic.DomainEvent;
+import org.example.cardgame.generic.UseCaseForCommand;
 import org.example.cardgame.usecase.gateway.JuegoDomainEventRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,8 +24,8 @@ public class CrearRondaUseCase extends UseCaseForCommand<CrearRondaCommand> {
     }
 
     @Override
-    public Flux<DomainEvent> apply(Mono<CrearRondaCommand> iniciarJuegoCommand) {
-        return iniciarJuegoCommand.flatMapMany((command) -> repository
+    public Flux<DomainEvent> apply(Mono<CrearRondaCommand> crearRondaCommand) {
+        return crearRondaCommand.flatMapMany(command -> repository
                 .obtenerEventosPor(command.getJuegoId())
                 .collectList()
                 .flatMapIterable(events -> {
@@ -35,9 +37,12 @@ public class CrearRondaUseCase extends UseCaseForCommand<CrearRondaCommand> {
                     Optional.ofNullable(juego.ronda())
                             .ifPresentOrElse(
                                     ronda -> juego.crearRonda(
-                                            ronda.incrementarRonda(jugadores), command.getTiempo()
-                                    ), () -> juego.crearRonda(
-                                            new Ronda(1, jugadores), command.getTiempo())
+                                            ronda.incrementarRonda(jugadores),
+                                            new TiempoLimite(command.getTiempo())
+                                    ),
+                                    () -> juego.crearRonda(
+                                            new Ronda(1, jugadores), new TiempoLimite(command.getTiempo())
+                                    )
                             );
                     return juego.getUncommittedChanges();
                 }));

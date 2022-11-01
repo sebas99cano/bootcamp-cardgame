@@ -1,6 +1,7 @@
 package org.example.cardgame.websocket.generic;
 
-import co.com.sofka.domain.generic.DomainEvent;
+
+import org.example.cardgame.generic.DomainEvent;
 
 import java.util.Date;
 

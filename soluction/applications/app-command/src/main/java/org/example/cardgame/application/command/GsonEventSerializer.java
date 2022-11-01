@@ -1,19 +1,24 @@
 package org.example.cardgame.application.command;
 
-import co.com.sofka.domain.generic.DomainEvent;
-import com.google.gson.Gson;
-import org.example.cardgame.application.command.generic.StoredEvent;
+
+
+import org.example.cardgame.generic.DomainEvent;
+import org.example.cardgame.generic.serialize.AbstractSerializer;
+import org.example.cardgame.generic.serialize.EventSerializer;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Type;
+
+
 @Component
-public class GsonEventSerializer implements StoredEvent.EventSerializer {
+public final class GsonEventSerializer extends AbstractSerializer implements EventSerializer {
+
     @Override
     public <T extends DomainEvent> T deserialize(String aSerialization, Class<?> aType) {
-        return (T) new Gson().fromJson(aSerialization, aType);
+        return gson.fromJson(aSerialization, (Type) aType);
     }
 
     @Override
     public String serialize(DomainEvent object) {
-        return new Gson().toJson(object);
-    }
+        return gson.toJson(object);    }
 }

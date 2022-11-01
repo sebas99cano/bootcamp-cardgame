@@ -1,30 +1,24 @@
 package org.example.cardgame.domain.events;
 
-import co.com.sofka.domain.generic.DomainEvent;
+import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.domain.values.JugadorId;
+import org.example.cardgame.domain.values.MontoRequerido;
 
-/**
- * The type Juego creado.
- */
 public class JuegoCreado extends DomainEvent {
     private final JugadorId jugadorPrincipal;
+    private final MontoRequerido montoRequerido;
 
-    /**
-     * Instantiates a new Juego creado.
-     *
-     * @param jugadorPrincipal the jugador principal
-     */
-    public JuegoCreado(JugadorId jugadorPrincipal) {
+    public JuegoCreado(JugadorId jugadorPrincipal, MontoRequerido montoRequerido) {
         super("cardgame.juegocreado");
         this.jugadorPrincipal = jugadorPrincipal;
+        this.montoRequerido = montoRequerido;
     }
 
-    /**
-     * Gets jugador principal.
-     *
-     * @return the jugador principal
-     */
     public JugadorId getJugadorPrincipal() {
         return jugadorPrincipal;
+    }
+
+    public MontoRequerido getMontoRequerido() {
+        return montoRequerido;
     }
 }

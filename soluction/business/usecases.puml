@@ -1,0 +1,22 @@
+@startuml
+title Casos de usos: Juego & Motor
+
+left to right direction
+
+
+Jugador --> (CrearJuego)
+Jugador --> (IniciarJuego)
+Jugador --> (IniciarRonda)
+Jugador --> (PonerCartaEnTablero)
+
+IniciarJuego ..> (CrearRonda)
+IniciarRonda ..> (IniciarCuentaRegresiva)
+IniciarCuentaRegresiva ..> (FinalizarRondaUseCase)
+FinalizarRondaUseCase .up.> (DeterminarGanadorUseCase)
+FinalizarRondaUseCase -up-> (CrearRonda)
+
+note right of (IniciarCuentaRegresiva)
+  Se inicia un Scheduler
+end note
+
+@enduml

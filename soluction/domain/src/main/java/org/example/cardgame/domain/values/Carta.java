@@ -1,12 +1,9 @@
 package org.example.cardgame.domain.values;
 
-import co.com.sofka.domain.generic.ValueObject;
+import org.example.cardgame.generic.ValueObject;
 
 import java.util.Objects;
 
-/**
- * The type Carta.
- */
 public class Carta implements ValueObject<Carta.Props>, Comparable<Carta> {
 
     private final CartaMaestraId cartaId;
@@ -15,19 +12,14 @@ public class Carta implements ValueObject<Carta.Props>, Comparable<Carta> {
     private final Integer poder;
 
 
-    /**
-     * Instantiates a new Carta.
-     *
-     * @param cartaId        the carta id
-     * @param poder          the poder
-     * @param estaOculta     the esta oculta
-     * @param estaHabilitada the esta habilitada
-     */
     public Carta(CartaMaestraId cartaId, Integer poder, Boolean estaOculta, Boolean estaHabilitada) {
-        this.cartaId = cartaId;
-        this.estaOculta = estaOculta;
-        this.estaHabilitada = estaHabilitada;
-        this.poder = poder;
+        this.cartaId = Objects.requireNonNull(cartaId);
+        this.estaOculta =  Objects.requireNonNull(estaOculta);
+        this.estaHabilitada =  Objects.requireNonNull(estaHabilitada);
+        this.poder =  Objects.requireNonNull(poder);
+        if(0 <= poder){
+            throw new IllegalArgumentException("El valor debe tener un poder positivo");
+        }
     }
 
     @Override
@@ -74,36 +66,13 @@ public class Carta implements ValueObject<Carta.Props>, Comparable<Carta> {
     }
 
 
-    /**
-     * The interface Props.
-     */
     public interface Props {
-        /**
-         * Carta id carta maestra id.
-         *
-         * @return the carta maestra id
-         */
         CartaMaestraId cartaId();
 
-        /**
-         * Poder integer.
-         *
-         * @return the integer
-         */
         Integer poder();
 
-        /**
-         * Esta oculta boolean.
-         *
-         * @return the boolean
-         */
         Boolean estaOculta();
 
-        /**
-         * Esta habilitada boolean.
-         *
-         * @return the boolean
-         */
         Boolean estaHabilitada();
     }
 }

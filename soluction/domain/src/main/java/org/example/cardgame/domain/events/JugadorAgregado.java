@@ -1,55 +1,25 @@
 package org.example.cardgame.domain.events;
 
-import co.com.sofka.domain.generic.DomainEvent;
+import org.example.cardgame.generic.DomainEvent;
+import org.example.cardgame.domain.values.Alias;
 import org.example.cardgame.domain.values.JugadorId;
-import org.example.cardgame.domain.values.Mazo;
 
-/**
- * The type Jugador agregado.
- */
 public class JugadorAgregado extends DomainEvent {
     private final JugadorId identity;
-    private final String alias;
-    private final Mazo mazo;
+    private final Alias alias;
 
-    /**
-     * Instantiates a new Jugador agregado.
-     *
-     * @param identity the identity
-     * @param alias    the alias
-     * @param mazo     the mazo
-     */
-    public JugadorAgregado(JugadorId identity, String alias, Mazo mazo) {
+    public JugadorAgregado(JugadorId identity, Alias alias) {
         super("cardgame.jugadoragregado");
         this.identity = identity;
         this.alias = alias;
-        this.mazo = mazo;
     }
 
-    /**
-     * Gets juego id.
-     *
-     * @return the juego id
-     */
     public JugadorId getJugadorId() {
         return identity;
     }
 
-    /**
-     * Gets alias.
-     *
-     * @return the alias
-     */
-    public String getAlias() {
+    public Alias getAlias() {
         return alias;
     }
 
-    /**
-     * Gets mazo.
-     *
-     * @return the mazo
-     */
-    public Mazo getMazo() {
-        return mazo;
-    }
 }

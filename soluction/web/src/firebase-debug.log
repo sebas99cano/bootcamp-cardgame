@@ -5,11 +5,11 @@
 [debug] [2022-09-05T01:58:09.690Z] Node Version:  v16.16.0
 [debug] [2022-09-05T01:58:09.691Z] Time:          Sun Sep 04 2022 22:58:09 GMT-0300 (hora estándar de Uruguay)
 [debug] [2022-09-05T01:58:09.691Z] ----------------------------------------------------------------------
-[debug] 
+[debug]
 [debug] [2022-09-05T01:58:09.695Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
-[debug] [2022-09-05T01:58:09.787Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-09-05T01:58:09.787Z] > command requires scopes: ["alias","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
 [debug] [2022-09-05T01:58:09.788Z] > authorizing via signed-in user (giannibaccino@gmail.com)
-[info] 
+[info]
      ######## #### ########  ######## ########     ###     ######  ########
      ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
      ######    ##  ########  ######   ########  #########  ######  ######
@@ -33,10 +33,10 @@ Before we get started, keep in mind:
 [debug] [2022-09-05T01:59:17.506Z] Node Version:  v16.16.0
 [debug] [2022-09-05T01:59:17.507Z] Time:          Sun Sep 04 2022 22:59:17 GMT-0300 (hora estándar de Uruguay)
 [debug] [2022-09-05T01:59:17.508Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2022-09-05T01:59:17.583Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug]
+[debug] [2022-09-05T01:59:17.583Z] > command requires scopes: ["alias","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
 [debug] [2022-09-05T01:59:17.583Z] > authorizing via signed-in user (giannibaccino@gmail.com)
-[info] 
+[info]
      ######## #### ########  ######## ########     ###     ######  ########
      ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
      ######    ##  ########  ######   ########  #########  ######  ######

@@ -1,41 +1,23 @@
 package org.example.cardgame.domain.events;
 
-import co.com.sofka.domain.generic.DomainEvent;
+import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.domain.values.TableroId;
+import org.example.cardgame.domain.values.TiempoLimite;
 
-/**
- * The type Tiempo cambiado del tablero.
- */
 public class TiempoCambiadoDelTablero extends DomainEvent {
     private final TableroId tableroId;
-    private final Integer tiempo;
+    private final TiempoLimite tiempoLimite;
 
-    /**
-     * Instantiates a new Tiempo cambiado del tablero.
-     *
-     * @param tableroId the tablero id
-     * @param tiempo    the tiempo
-     */
-    public TiempoCambiadoDelTablero(TableroId tableroId, Integer tiempo) {
+    public TiempoCambiadoDelTablero(TableroId tableroId, TiempoLimite tiempoLimite) {
         super("cardgame.tiempocambiadodeltablero");
         this.tableroId = tableroId;
-        this.tiempo = tiempo;
+        this.tiempoLimite = tiempoLimite;
     }
 
-    /**
-     * Gets tiempo.
-     *
-     * @return the tiempo
-     */
-    public Integer getTiempo() {
-        return tiempo;
+    public TiempoLimite getTiempoLimite() {
+        return tiempoLimite;
     }
 
-    /**
-     * Gets tablero id.
-     *
-     * @return the tablero id
-     */
     public TableroId getTableroId() {
         return tableroId;
     }

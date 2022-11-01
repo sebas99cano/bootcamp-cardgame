@@ -1,6 +1,6 @@
 export interface User {
     uid: string;
-    email: string;
+    alias: string;
     displayName: string;
     photoURL: string;
     emailVerified: boolean;

@@ -6,5 +6,5 @@ import reactor.core.publisher.Flux;
 
 
 public interface ListaDeCartaService {
-    Flux<CartaMaestra> obtenerCartasDeMarvel();
+    Flux<CartaMaestra> obtenerCartasPepsico();
 }

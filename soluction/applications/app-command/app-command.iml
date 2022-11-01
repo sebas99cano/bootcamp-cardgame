@@ -116,7 +116,6 @@
     <orderEntry type="library" name="Maven: com.rabbitmq:amqp-client:5.12.0" level="project" />
     <orderEntry type="module" module-name="business" />
     <orderEntry type="module" module-name="domain" />
-    <orderEntry type="library" name="Maven: co.com.sofka:domain:1.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.intuit.karate:karate-junit5:1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.intuit.karate:karate-core:1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.graalvm.js:js-scriptengine:21.2.0" level="project" />

@@ -1,9 +1,10 @@
 package org.example.cardgame.usecase.usecase;
 
-import co.com.sofka.domain.generic.DomainEvent;
 import org.example.cardgame.domain.Juego;
 import org.example.cardgame.domain.command.IniciarRondaCommand;
 import org.example.cardgame.domain.values.JuegoId;
+import org.example.cardgame.generic.DomainEvent;
+import org.example.cardgame.generic.UseCaseForCommand;
 import org.example.cardgame.usecase.gateway.JuegoDomainEventRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,7 +19,7 @@ public class IniciarRondaUseCase extends UseCaseForCommand<IniciarRondaCommand> 
 
     @Override
     public Flux<DomainEvent> apply(Mono<IniciarRondaCommand> iniciarJuegoCommand) {
-        return iniciarJuegoCommand.flatMapMany((command) -> repository
+        return iniciarJuegoCommand.flatMapMany(command -> repository
                 .obtenerEventosPor(command.getJuegoId())
                 .collectList()
                 .flatMapIterable(events -> {

@@ -1,67 +1,41 @@
 package org.example.cardgame.domain;
 
-import co.com.sofka.domain.generic.Entity;
+import org.example.cardgame.domain.values.Alias;
 import org.example.cardgame.domain.values.Carta;
 import org.example.cardgame.domain.values.JugadorId;
 import org.example.cardgame.domain.values.Mazo;
+import org.example.cardgame.generic.Entity;
 
 import java.util.Objects;
 
-/**
- * The type Jugador.
- */
 public class Jugador extends Entity<JugadorId> {
-    private final String email;
+    private final Alias alias;
     private Mazo mazo;
 
-    /**
-     * Instantiates a new Jugador.
-     *
-     * @param entityId the entity id
-     * @param email    the email
-     * @param mazo     the mazo
-     */
-    public Jugador(JugadorId entityId, String email, Mazo mazo) {
+    public Jugador(JugadorId entityId, Alias alias) {
         super(entityId);
-        this.email = Objects.requireNonNull(email);
+        this.alias = Objects.requireNonNull(alias);
+    }
+
+    public void asignarMazo(Mazo mazo){
         this.mazo = Objects.requireNonNull(mazo);
         if (mazo.value().cantidad() <= 0) {
             throw new IllegalArgumentException("El mazo debe contener cartas ");
         }
     }
 
-    /**
-     * Agregar carta a mazo.
-     *
-     * @param carta the carta
-     */
     public void agregarCartaAMazo(Carta carta) {
         mazo = mazo.nuevaCarta(carta);
     }
 
-    /**
-     * Quitar carta de mazo.
-     *
-     * @param carta the carta
-     */
     public void quitarCartaDeMazo(Carta carta) {
         mazo = mazo.retirarCarta(carta);
     }
 
-    /**
-     * Alias string.
-     *
-     * @return the string
-     */
-    public String alias() {
-        return email;
+    public Alias alias() {
+        return alias;
     }
 
-    /**
-     * Mazo mazo.
-     *
-     * @return the mazo
-     */
     public Mazo mazo() {
         return mazo;
     }

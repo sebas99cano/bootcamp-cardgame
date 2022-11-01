@@ -1,8 +1,9 @@
 package org.example.cardgame.application.command.adapter.repo;
 
-import co.com.sofka.domain.generic.DomainEvent;
-import org.example.cardgame.application.command.generic.EventStoreRepository;
-import org.example.cardgame.application.command.generic.StoredEvent;
+import org.example.cardgame.generic.EventStoreRepository;
+import org.example.cardgame.generic.StoredEvent;
+import org.example.cardgame.generic.DomainEvent;
+import org.example.cardgame.generic.serialize.EventSerializer;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -16,10 +17,10 @@ import java.util.Comparator;
 public class MongoEventStoreRepository implements EventStoreRepository {
 
     private final ReactiveMongoTemplate template;
+    private final EventSerializer eventSerializer;
 
-    private final StoredEvent.EventSerializer eventSerializer;
 
-    public MongoEventStoreRepository(ReactiveMongoTemplate template, StoredEvent.EventSerializer eventSerializer) {
+    public MongoEventStoreRepository(ReactiveMongoTemplate template, EventSerializer eventSerializer) {
         this.template = template;
         this.eventSerializer = eventSerializer;
     }

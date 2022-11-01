@@ -1,29 +1,29 @@
 package org.example.cardgame.domain;
 
-import co.com.sofka.domain.generic.EventChange;
 import org.example.cardgame.domain.events.*;
+import org.example.cardgame.generic.EventChange;
 
 import java.util.HashMap;
 import java.util.Objects;
 
-/**
- * The type Juego event change.
- */
 public class JuegoEventChange extends EventChange {
-    /**
-     * Instantiates a new Juego event change.
-     *
-     * @param juego the juego
-     */
     public JuegoEventChange(Juego juego) {
         apply((JuegoCreado event) -> {
             juego.jugadores = new HashMap<>();
+            juego.montoRequerido = event.getMontoRequerido();
             juego.jugadorPrincipal = event.getJugadorPrincipal();
         });
         apply((JugadorAgregado event) -> {
             juego.jugadores.put(event.getJugadorId(),
-                    new Jugador(event.getJugadorId(), event.getAlias(), event.getMazo())
+                    new Jugador(event.getJugadorId(), event.getAlias())
             );
+        });
+
+        apply((MazoAsignadoAJugador event) -> {
+            if (Objects.isNull(juego.tablero)) {
+                throw new IllegalArgumentException("Debe existir el tablero primero");
+            }
+            juego.jugadores.get(event.getJugadorId()).asignarMazo(event.getMazo());
         });
 
         apply((RondaCreada event) -> {
@@ -31,7 +31,7 @@ public class JuegoEventChange extends EventChange {
                 throw new IllegalArgumentException("Debe existir el tablero primero");
             }
             juego.ronda = event.getRonda();
-            juego.tablero.ajustarTiempo(event.getTiempo());
+            juego.tablero.ajustarTiempo(event.getTiempoLimite());
         });
 
         apply((TableroCreado event) -> {
@@ -39,7 +39,7 @@ public class JuegoEventChange extends EventChange {
         });
 
         apply((TiempoCambiadoDelTablero event) -> {
-            juego.tablero.ajustarTiempo(event.getTiempo());
+            juego.tablero.ajustarTiempo(event.getTiempoLimite());
         });
 
         apply((CartaPuestaEnTablero event) -> {
@@ -55,6 +55,9 @@ public class JuegoEventChange extends EventChange {
         });
 
         apply((RondaIniciada event) -> {
+            if (Objects.isNull(juego.ronda)) {
+                throw new IllegalArgumentException("Debe existir la ronda primero");
+            }
             juego.ronda = juego.ronda.iniciarRonda();
             juego.tablero.habilitarApuesta();
         });

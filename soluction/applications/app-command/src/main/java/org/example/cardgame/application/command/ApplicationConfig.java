@@ -4,6 +4,10 @@ package org.example.cardgame.application.command;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import org.example.cardgame.generic.EventPublisher;
+import org.example.cardgame.generic.EventStoreRepository;
+import org.example.cardgame.generic.IntegrationHandle;
+import org.example.cardgame.generic.serialize.EventSerializer;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -33,6 +37,7 @@ import java.util.Arrays;
 public class ApplicationConfig {
     public static final String EXCHANGE = "core-game";
     public static final String QUEUE = "juego.commandhandles";
+    public static final String STORE_NAME = "juego";
 
     private final  AmqpAdmin amqpAdmin;
     private final MongoClient mongoClient;
@@ -55,7 +60,7 @@ public class ApplicationConfig {
     public Mono<Connection> connectionMono() {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.useNio();
-        return Mono.fromCallable(() -> connectionFactory.newConnection("reactor-rabbit")).cache();
+        return Mono.fromCallable(() -> connectionFactory.newConnection(STORE_NAME)).cache();
     }
 
     @Bean
@@ -84,7 +89,12 @@ public class ApplicationConfig {
 
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
-        return new ReactiveMongoTemplate(mongoClient, "test");
+        return new ReactiveMongoTemplate(mongoClient, STORE_NAME+"db");
+    }
+
+    @Bean
+    public IntegrationHandle integrationHandle(EventStoreRepository repository, EventPublisher eventPublisher, EventSerializer eventSerializer){
+        return new IntegrationHandle(STORE_NAME, repository, eventPublisher, eventSerializer);
     }
 
     @Bean

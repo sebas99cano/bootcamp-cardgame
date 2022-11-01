@@ -16,7 +16,7 @@ public class DataConsultarCartaMaestraService implements ListaDeCartaService {
 
 
     @Override
-    public Flux<CartaMaestra> obtenerCartasDeMarvel() {
+    public Flux<CartaMaestra> obtenerCartasPepsico() {
         return template.findAll(CartaMaestra.class, "cards");
     }
 }
