@@ -1,11 +1,38 @@
-package org.example.cardgame.application.queries.handle.model;
+package org.example.cardgame.application.queries.adapter.repo.model;
 
 import java.util.Objects;
 import java.util.Set;
 
 public class MazoViewModel {
+    private String id;
+    private String uid;
+    private String juegoId;
     private Integer cantidad;
     private Set<Carta> cartas;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setJuegoId(String juegoId) {
+        this.juegoId = juegoId;
+    }
+
+    public String getJuegoId() {
+        return juegoId;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
 
     public Integer getCantidad() {
         return cantidad;

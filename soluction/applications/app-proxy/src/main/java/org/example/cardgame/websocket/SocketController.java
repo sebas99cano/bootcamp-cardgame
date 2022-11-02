@@ -1,6 +1,6 @@
 package org.example.cardgame.websocket;
 
-import co.com.sofka.domain.generic.DomainEvent;
+import org.example.cardgame.generic.DomainEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package org.example.cardgame.application.queries.handle.materialize;
 
-import co.com.sofka.domain.generic.DomainEvent;
+import org.example.cardgame.generic.DomainEvent;
 import reactor.core.publisher.Mono;
 
 public interface MaterializeService{

@@ -1,13 +1,22 @@
-package org.example.cardgame.application.queries.handle.model;
+package org.example.cardgame.application.queries.adapter.repo.model;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class TableroViewModel {
+    private String id;
     private Tablero tablero;
     private Integer tiempo;
     private Ronda ronda;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Tablero getTablero() {
         return tablero;
@@ -38,15 +47,7 @@ public class TableroViewModel {
         private Set<String> jugadores;
         private Boolean habilitado;
         private Map<String, Map<String, MazoViewModel.Carta>> cartas;
-        private String jugadorId;
 
-        public void setJugadorId(String jugadorId) {
-            this.jugadorId = jugadorId;
-        }
-
-        public String getJugadorId() {
-            return jugadorId;
-        }
 
         public String getId() {
             return id;
@@ -83,7 +84,7 @@ public class TableroViewModel {
 
     public static class Ronda{
         private Set<String> jugadores;
-        private String numero;
+        private Integer numero;
         private Boolean estaIniciada;
 
         public Set<String> getJugadores() {
@@ -94,11 +95,11 @@ public class TableroViewModel {
             this.jugadores = jugadores;
         }
 
-        public String getNumero() {
+        public Integer getNumero() {
             return numero;
         }
 
-        public void setNumero(String numero) {
+        public void setNumero(Integer numero) {
             this.numero = numero;
         }
 

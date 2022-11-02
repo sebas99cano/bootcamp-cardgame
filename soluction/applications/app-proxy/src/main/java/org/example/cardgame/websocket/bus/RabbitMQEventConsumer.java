@@ -2,7 +2,6 @@ package org.example.cardgame.websocket.bus;
 
 
 import org.example.cardgame.websocket.ApplicationConfig;
-import org.example.cardgame.websocket.GsonEventSerializer;
 import org.example.cardgame.websocket.SocketController;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;

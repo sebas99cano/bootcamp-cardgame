@@ -1,4 +1,4 @@
-package org.example.cardgame.generic.serialize;
+package org.example.cardgame.application.queries;
 
 import com.google.gson.*;
 
@@ -14,8 +14,8 @@ public abstract class AbstractSerializer {
 
     protected AbstractSerializer() {
         this.gson = new GsonBuilder()
-                .registerTypeAdapter(Instant.class, new AbstractSerializer.DateSerializer())
-                .registerTypeAdapter(Instant.class, new AbstractSerializer.DateDeserializer())
+                .registerTypeAdapter(Instant.class, new DateSerializer())
+                .registerTypeAdapter(Instant.class, new DateDeserializer())
                 .serializeNulls()
                 .create();
     }

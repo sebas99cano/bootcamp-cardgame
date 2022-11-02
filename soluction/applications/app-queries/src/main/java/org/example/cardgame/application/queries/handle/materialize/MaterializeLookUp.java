@@ -1,9 +1,11 @@
 package org.example.cardgame.application.queries.handle.materialize;
 
-import org.example.cardgame.application.queries.handle.materialize.gameview.*;
-import org.example.cardgame.application.queries.handle.materialize.mazoview.HandleCartaQuitadaDelMazo;
-import org.example.cardgame.application.queries.handle.materialize.mazoview.HandleCartasAsignadasAJugador;
-import org.example.cardgame.application.queries.handle.materialize.mazoview.HandleMazoAgregado;
+import org.example.cardgame.application.queries.handle.materialize.juegolist.*;
+import org.example.cardgame.application.queries.handle.materialize.mazo.HandleCartaQuitadaDelMazo;
+import org.example.cardgame.application.queries.handle.materialize.mazo.HandleCartasAsignadasAJugador;
+import org.example.cardgame.application.queries.handle.materialize.mazo.HandleMazoAgregado;
+import org.example.cardgame.application.queries.handle.materialize.tablero.*;
+import org.example.cardgame.domain.events.MazoAsignadoAJugador;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -27,9 +29,12 @@ public class MaterializeLookUp {
                 context.getBean(HandleJuegoFinalizado.class)
         ));
         business.put("cardgame.jugadoragregado", Flux.just(
-                context.getBean(HandleJugadorAgregado.class),
+                context.getBean(HandleJugadorAgregado.class)
+        ));
+        business.put("cardgame.mazoasignadoajugador", Flux.just(
                 context.getBean(HandleMazoAgregado.class)
         ));
+
         business.put("cardgame.rondacreada", Flux.just(
                 context.getBean(HandleRondaCreada.class)
         ));

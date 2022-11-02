@@ -20,5 +20,6 @@ public final class GsonEventSerializer extends AbstractSerializer implements Eve
 
     @Override
     public String serialize(DomainEvent object) {
-        return gson.toJson(object);    }
+        return gson.toJson(object);
+    }
 }

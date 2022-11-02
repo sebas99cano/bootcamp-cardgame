@@ -1,20 +1,18 @@
 package org.example.cardgame.application.queries.adapter.bus;
 
 
-import co.com.sofka.domain.generic.DomainEvent;
 import org.example.cardgame.application.queries.GsonEventSerializer;
 import org.example.cardgame.application.queries.handle.materialize.MaterializeLookUp;
+import org.example.cardgame.generic.DomainEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 import reactor.rabbitmq.ConsumeOptions;
 import reactor.rabbitmq.ExceptionHandlers;
 import reactor.rabbitmq.Receiver;
 
 import java.time.Duration;
-import java.util.function.Consumer;
 
 import static org.example.cardgame.application.queries.ApplicationConfig.QUEUE;
 

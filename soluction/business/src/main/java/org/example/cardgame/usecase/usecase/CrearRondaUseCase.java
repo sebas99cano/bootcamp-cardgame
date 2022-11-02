@@ -41,7 +41,8 @@ public class CrearRondaUseCase extends UseCaseForCommand<CrearRondaCommand> {
                                             new TiempoLimite(command.getTiempo())
                                     ),
                                     () -> juego.crearRonda(
-                                            new Ronda(1, jugadores), new TiempoLimite(command.getTiempo())
+                                            new Ronda(1, jugadores),
+                                            new TiempoLimite(command.getTiempo())
                                     )
                             );
                     return juego.getUncommittedChanges();

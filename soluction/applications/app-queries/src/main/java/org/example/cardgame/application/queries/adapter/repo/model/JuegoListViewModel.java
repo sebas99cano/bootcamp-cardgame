@@ -1,5 +1,6 @@
-package org.example.cardgame.application.queries.handle.model;
+package org.example.cardgame.application.queries.adapter.repo.model;
 
+import java.time.Instant;
 import java.util.Map;
 
 public class JuegoListViewModel {
@@ -7,16 +8,16 @@ public class JuegoListViewModel {
     private Boolean iniciado;
     private Boolean finalizado;
     private String uid;
-    private String fecha;
+    private Instant fecha;
     private Map<String, Jugador> jugadores;
     private Jugador ganador;
 
 
-    public String getFecha() {
+    public Instant getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Instant fecha) {
         this.fecha = fecha;
     }
 

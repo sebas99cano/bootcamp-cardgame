@@ -40,6 +40,7 @@ public class DeterminarGanadorUseCase  extends UseCaseForEvent<RondaTerminada> {
 
                     intentoDeFinalizarPorInexistenciaDeJugadores(juego, jugadores);
                     intentoDeFinalizarPorInexistenciaDeCompetidores(juego, competidores);
+
                     if(noHayGanadorDel(juego)){
                         return crearNuevaRonda(event, juego, jugadores);
                     }

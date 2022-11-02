@@ -5,5 +5,4 @@ import reactor.core.publisher.Flux;
 
 public interface JuegoDomainEventRepository {
     Flux<DomainEvent> obtenerEventosPor(String id);
-
 }

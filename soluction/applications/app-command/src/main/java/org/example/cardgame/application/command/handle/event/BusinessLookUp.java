@@ -1,6 +1,6 @@
 package org.example.cardgame.application.command.handle.event;
 
-import org.example.cardgame.generic.serialize.BusinessService;
+import org.example.cardgame.generic.BusinessService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;

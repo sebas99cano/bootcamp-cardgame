@@ -1,5 +1,5 @@
 @startuml
-title Casos de usos: Juego & Motor
+title Casos de usos: Juego
 
 left to right direction
 
@@ -8,12 +8,27 @@ Jugador --> (CrearJuego)
 Jugador --> (IniciarJuego)
 Jugador --> (IniciarRonda)
 Jugador --> (PonerCartaEnTablero)
+Jugador --> (UnirseAlJuego)
 
-IniciarJuego ..> (CrearRonda)
+IniciarJuego --> (CrearRonda)
+IniciarJuego ..> (RepartirCartas)
 IniciarRonda ..> (IniciarCuentaRegresiva)
-IniciarCuentaRegresiva ..> (FinalizarRondaUseCase)
-FinalizarRondaUseCase .up.> (DeterminarGanadorUseCase)
-FinalizarRondaUseCase -up-> (CrearRonda)
+IniciarCuentaRegresiva --> (FinalizarRonda)
+FinalizarRonda .up.> (DeterminarGanador)
+FinalizarRonda -up-> (CrearRonda)
+DeterminarGanador --> (CrearRonda)
+
+note right of (DeterminarGanador)
+  finalizar juego
+end note
+
+note right of (FinalizarRonda)
+  devolver cartas al ganador
+end note
+
+note right of (IniciarJuego)
+  crear tablero
+end note
 
 note right of (IniciarCuentaRegresiva)
   Se inicia un Scheduler

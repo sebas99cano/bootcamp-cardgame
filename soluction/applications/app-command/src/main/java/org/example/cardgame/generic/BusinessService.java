@@ -1,4 +1,4 @@
-package org.example.cardgame.generic.serialize;
+package org.example.cardgame.generic;
 
 import org.example.cardgame.generic.DomainEvent;
 import reactor.core.publisher.Mono;
