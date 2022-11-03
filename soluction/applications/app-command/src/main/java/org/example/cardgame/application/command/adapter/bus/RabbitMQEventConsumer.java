@@ -1,9 +1,8 @@
 package org.example.cardgame.application.command.adapter.bus;
 
 
-import org.example.cardgame.application.command.handle.event.BusinessLookUp;
+import org.example.cardgame.application.command.handle.BusinessLookUp;
 import org.example.cardgame.generic.DomainEvent;
-import org.example.cardgame.application.command.GsonEventSerializer;
 import org.example.cardgame.generic.serialize.EventSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

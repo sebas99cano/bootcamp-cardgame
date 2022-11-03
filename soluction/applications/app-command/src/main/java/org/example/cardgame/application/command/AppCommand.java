@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PreDestroy;
+import java.io.IOException;
 import java.util.Objects;
 
 @SpringBootApplication
@@ -21,7 +22,7 @@ public class AppCommand {
     }
 
     @PreDestroy
-    public void close() throws Exception {
+    public void close() throws IOException {
         Objects.requireNonNull(connectionMono.block()).close();
     }
 }

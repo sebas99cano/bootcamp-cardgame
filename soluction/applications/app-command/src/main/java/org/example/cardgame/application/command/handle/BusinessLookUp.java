@@ -1,5 +1,7 @@
-package org.example.cardgame.application.command.handle.event;
+package org.example.cardgame.application.command.handle;
 
+import org.example.cardgame.application.command.handle.event.CuentaRegresivaEventHandle;
+import org.example.cardgame.application.command.handle.event.DeterminarGanadorEventHandle;
 import org.example.cardgame.generic.BusinessService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;

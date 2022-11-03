@@ -27,7 +27,7 @@ public class StoredEvent {
 
     public static StoredEvent wrapEvent(DomainEvent domainEvent, EventSerializer serializer) {
         return new StoredEvent(domainEvent.getClass().getCanonicalName(),
-                new Date(), serializer.serialize(domainEvent)
+                Date.from(domainEvent.when), serializer.serialize(domainEvent)
         );
     }
 
