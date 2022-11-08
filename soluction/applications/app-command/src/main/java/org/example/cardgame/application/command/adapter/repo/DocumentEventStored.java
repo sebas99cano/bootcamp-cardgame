@@ -1,5 +1,7 @@
-package org.example.cardgame.generic;
+package org.example.cardgame.application.command.adapter.repo;
 
+
+import org.example.cardgame.generic.StoredEvent;
 
 public class DocumentEventStored {
     private String aggregateRootId;

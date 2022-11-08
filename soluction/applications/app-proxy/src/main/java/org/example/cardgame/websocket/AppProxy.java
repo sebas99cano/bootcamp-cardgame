@@ -6,8 +6,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 @SpringBootApplication
 @EnableWebSocket
-public class AppSocket {
+public class AppProxy {
     public static void main(String[] args) {
-        SpringApplication.run(AppSocket.class, args);
+        SpringApplication.run(AppProxy.class, args);
     }
 }

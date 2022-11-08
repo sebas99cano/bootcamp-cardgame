@@ -1,10 +1,10 @@
 package org.example.cardgame.application.command.adapter.bus;
 
 import org.example.cardgame.application.command.ApplicationConfig;
+import org.example.cardgame.application.command.ConfigProperties;
 import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.ErrorEvent;
 import org.example.cardgame.generic.EventPublisher;
-import org.example.cardgame.application.command.GsonEventSerializer;
 import org.example.cardgame.generic.serialize.EventSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +19,12 @@ public class RabbitMQEventPublisher implements EventPublisher {
 
     private final Sender sender;
     private final EventSerializer eventSerializer;
+    private final ConfigProperties configProperties;
 
-    public RabbitMQEventPublisher(Sender sender, EventSerializer eventSerializer) {
+    public RabbitMQEventPublisher(Sender sender, EventSerializer eventSerializer, ConfigProperties configProperties) {
         this.sender = sender;
         this.eventSerializer = eventSerializer;
+        this.configProperties = configProperties;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class RabbitMQEventPublisher implements EventPublisher {
                 eventSerializer.serialize(event)
         );
         return  Mono.just(new OutboundMessage(
-                ApplicationConfig.EXCHANGE, event.type, notification.serialize().getBytes()
+                configProperties.getExchange(), event.type, notification.serialize().getBytes()
         ));
     }
 

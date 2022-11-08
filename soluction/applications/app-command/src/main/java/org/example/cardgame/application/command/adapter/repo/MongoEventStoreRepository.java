@@ -1,6 +1,5 @@
 package org.example.cardgame.application.command.adapter.repo;
 
-import org.example.cardgame.generic.DocumentEventStored;
 import org.example.cardgame.generic.EventStoreRepository;
 import org.example.cardgame.generic.StoredEvent;
 import org.example.cardgame.generic.DomainEvent;

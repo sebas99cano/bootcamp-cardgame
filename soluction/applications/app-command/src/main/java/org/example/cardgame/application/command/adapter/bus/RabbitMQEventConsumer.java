@@ -1,6 +1,7 @@
 package org.example.cardgame.application.command.adapter.bus;
 
 
+import org.example.cardgame.application.command.ConfigProperties;
 import org.example.cardgame.application.command.handle.BusinessLookUp;
 import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.serialize.EventSerializer;
@@ -15,18 +16,18 @@ import reactor.rabbitmq.Receiver;
 
 import java.time.Duration;
 
-import static org.example.cardgame.application.command.ApplicationConfig.QUEUE;
 
 
 @Component
 public class RabbitMQEventConsumer implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQEventConsumer.class);
-
+    private final ConfigProperties configProperties;
     private final Receiver receiver;
     private final EventSerializer eventSerializer;
     private final BusinessLookUp businessLookUp;
 
-    public RabbitMQEventConsumer(Receiver receiver, EventSerializer eventSerializer, BusinessLookUp businessLookUp){
+    public RabbitMQEventConsumer(ConfigProperties configProperties, Receiver receiver, EventSerializer eventSerializer, BusinessLookUp businessLookUp){
+        this.configProperties = configProperties;
         this.receiver = receiver;
         this.eventSerializer = eventSerializer;
         this.businessLookUp = businessLookUp;
@@ -35,7 +36,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        receiver.consumeManualAck(QUEUE, new ConsumeOptions()
+        receiver.consumeManualAck(configProperties.getQueue(), new ConsumeOptions()
                 .exceptionHandler(new ExceptionHandlers.RetryAcknowledgmentExceptionHandler(
                         Duration.ofSeconds(20), Duration.ofMillis(500),
                         ExceptionHandlers.CONNECTION_RECOVERY_PREDICATE

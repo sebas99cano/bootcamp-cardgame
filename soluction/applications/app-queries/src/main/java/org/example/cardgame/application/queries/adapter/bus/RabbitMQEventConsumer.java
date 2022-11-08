@@ -1,6 +1,7 @@
 package org.example.cardgame.application.queries.adapter.bus;
 
 
+import org.example.cardgame.application.queries.ConfigProperties;
 import org.example.cardgame.application.queries.GsonEventSerializer;
 import org.example.cardgame.application.queries.handle.materialize.MaterializeLookUp;
 import org.example.cardgame.generic.DomainEvent;
@@ -14,7 +15,6 @@ import reactor.rabbitmq.Receiver;
 
 import java.time.Duration;
 
-import static org.example.cardgame.application.queries.ApplicationConfig.QUEUE;
 
 
 @Component
@@ -22,11 +22,13 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQEventConsumer.class);
 
     private final GsonEventSerializer serializer;
+    private final ConfigProperties configProperties;
     private final Receiver receiver;
     private final MaterializeLookUp materializeLookUp;
 
-    public RabbitMQEventConsumer(GsonEventSerializer serializer, Receiver receiver, MaterializeLookUp materializeLookUp) {
+    public RabbitMQEventConsumer(GsonEventSerializer serializer, ConfigProperties configProperties, Receiver receiver, MaterializeLookUp materializeLookUp) {
         this.serializer = serializer;
+        this.configProperties = configProperties;
         this.receiver = receiver;
         this.materializeLookUp = materializeLookUp;
     }
@@ -34,7 +36,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        receiver.consumeManualAck(QUEUE, new ConsumeOptions()
+        receiver.consumeManualAck(configProperties.getQueue(), new ConsumeOptions()
                 .exceptionHandler(new ExceptionHandlers.RetryAcknowledgmentExceptionHandler(
                         Duration.ofSeconds(20), Duration.ofMillis(500),
                         ExceptionHandlers.CONNECTION_RECOVERY_PREDICATE

@@ -12,6 +12,7 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,32 +36,32 @@ import java.util.Arrays;
         (type = FilterType.REGEX, pattern = ".*UseCase")
 )
 public class ApplicationConfig {
-    public static final String EXCHANGE = "core-game";
-    public static final String QUEUE = "juego.commandhandles";
-    public static final String STORE_NAME = "juego";
+
 
     private final  AmqpAdmin amqpAdmin;
     private final MongoClient mongoClient;
+    private final ConfigProperties configProperties;
 
-    public ApplicationConfig(AmqpAdmin amqpAdmin, MongoClient mongoClient) {
+    public ApplicationConfig(AmqpAdmin amqpAdmin, MongoClient mongoClient, ConfigProperties configProperties) {
         this.amqpAdmin = amqpAdmin;
         this.mongoClient = mongoClient;
+        this.configProperties = configProperties;
     }
 
     @PostConstruct
     public void init() {
-        var exchange = new TopicExchange(EXCHANGE);
-        var queue = new Queue(QUEUE, false, false, true);
+        var exchange = new TopicExchange(configProperties.getExchange());
+        var queue = new Queue(configProperties.getQueue(), false, false, true);
         amqpAdmin.declareExchange(exchange);
         amqpAdmin.declareQueue(queue);
-        amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with("cardgame.#"));
+        amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with(configProperties.getRoutingKey()));
     }
 
     @Bean
-    public Mono<Connection> connectionMono() {
+    public Mono<Connection> connectionMono(@Value("spring.application.name") String name) {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.useNio();
-        return Mono.fromCallable(() -> connectionFactory.newConnection(STORE_NAME)).cache();
+        return Mono.fromCallable(() -> connectionFactory.newConnection(name)).cache();
     }
 
     @Bean
@@ -89,12 +90,12 @@ public class ApplicationConfig {
 
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
-        return new ReactiveMongoTemplate(mongoClient, STORE_NAME+"db");
+        return new ReactiveMongoTemplate(mongoClient, configProperties.getStoreName()+"db");
     }
 
     @Bean
     public IntegrationHandle integrationHandle(EventStoreRepository repository, EventPublisher eventPublisher, EventSerializer eventSerializer){
-        return new IntegrationHandle(STORE_NAME, repository, eventPublisher, eventSerializer);
+        return new IntegrationHandle(configProperties.getStoreName(), repository, eventPublisher, eventSerializer);
     }
 
     @Bean

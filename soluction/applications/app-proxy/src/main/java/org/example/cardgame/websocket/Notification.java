@@ -1,4 +1,4 @@
-package org.example.cardgame.websocket.bus;
+package org.example.cardgame.websocket;
 
 import com.google.gson.Gson;
 

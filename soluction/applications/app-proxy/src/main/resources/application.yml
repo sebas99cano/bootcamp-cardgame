@@ -10,6 +10,10 @@ spring:
     ansi:
       enabled: ALWAYS
   application:
-    name: proxy
+    name: game-proxy
   rabbitmq:
     addresses: ${RABBITMQ_URI:amqp://guest:guest@localhost:5672}
+microservice:
+  exchange: ${EXCHANGE:core-game}
+  queue: ${QUEUE:game.proxyhandles}
+  routingKey: ${ROUTING_KEY:cardgame.#}
