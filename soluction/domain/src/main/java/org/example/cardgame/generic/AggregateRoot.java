@@ -12,10 +12,10 @@ public abstract class AggregateRoot<I extends Identity> extends Entity<I> {
     }
 
     protected ChangeEventSubscriber.ChangeApply appendChange(DomainEvent event) {
-        var nameClass = entityId().getClass().getSimpleName();
+        var nameClass = identity().getClass().getSimpleName();
         var aggregate = nameClass.replaceAll("(Identity|Id|ID)", "").toLowerCase();
         event.setAggregateName(aggregate);
-        event.setAggregateRootId(entityId().value());
+        event.setAggregateRootId(identity().value());
         return changeEventSubscriber.appendChange(event);
     }
 
