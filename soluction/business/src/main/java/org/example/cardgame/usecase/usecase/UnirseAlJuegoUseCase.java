@@ -25,6 +25,7 @@ public class UnirseAlJuegoUseCase extends UseCaseForCommand<UniserAlJuegoCommand
                 .obtenerEventosPor(command.getJuegoId())
                 .collectList()
                 .flatMapIterable(events -> {
+                    //TODO: la regla para el monto minimo
                     var juego = Juego.from(JuegoId.of(command.getJuegoId()), events);
                     var jugadorId = JugadorId.of(command.getJuegoId());
                     juego.asignarJugador(jugadorId, new Alias(command.getAlias()));

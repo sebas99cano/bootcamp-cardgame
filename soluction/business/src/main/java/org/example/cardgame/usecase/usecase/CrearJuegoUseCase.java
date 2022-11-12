@@ -17,7 +17,11 @@ public class CrearJuegoUseCase extends UseCaseForCommand<CrearJuegoCommand> {
                         var juego = new Juego(
                                 JuegoId.of(command.getJuegoId()),
                                 JugadorId.of(command.getJugadorPrincipalId()),
-                                new MontoRequerido( command.getMontoRequerido())
+                                new MontoRequerido(command.getMontoRequerido())
+                        );
+                        juego.asignarJugador(
+                                JugadorId.of(command.getJugadorPrincipalId()),
+                                new Alias(command.getAlias())
                         );
                         return juego.getUncommittedChanges();
                 });

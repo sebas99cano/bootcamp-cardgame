@@ -69,12 +69,6 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public GsonEventSerializer gsonEventSerializer() {
-        return new GsonEventSerializer();
-    }
-
-
-    @Bean
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
     }

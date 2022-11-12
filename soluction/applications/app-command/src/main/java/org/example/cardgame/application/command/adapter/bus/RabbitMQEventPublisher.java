@@ -1,6 +1,7 @@
 package org.example.cardgame.application.command.adapter.bus;
 
-import org.example.cardgame.application.command.ApplicationConfig;
+import brave.Span;
+import brave.Tracer;
 import org.example.cardgame.application.command.ConfigProperties;
 import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.ErrorEvent;
@@ -16,12 +17,13 @@ import reactor.rabbitmq.Sender;
 @Service
 public class RabbitMQEventPublisher implements EventPublisher {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQEventPublisher.class);
-
+    private final Tracer tracer;
     private final Sender sender;
     private final EventSerializer eventSerializer;
     private final ConfigProperties configProperties;
 
-    public RabbitMQEventPublisher(Sender sender, EventSerializer eventSerializer, ConfigProperties configProperties) {
+    public RabbitMQEventPublisher(Tracer tracer, Sender sender, EventSerializer eventSerializer, ConfigProperties configProperties) {
+        this.tracer = tracer;
         this.sender = sender;
         this.eventSerializer = eventSerializer;
         this.configProperties = configProperties;
@@ -29,11 +31,31 @@ public class RabbitMQEventPublisher implements EventPublisher {
 
     @Override
     public void publish(DomainEvent event) {
-        sender.sendWithPublishConfirms(buildOutboundMessage(event))
+        var eventBody = eventSerializer.serialize(event);
+
+        Span span = tracer.nextSpan()
+                .name("publisher")
+                .tag("eventType", event.type)
+                .tag("aggregateRootId", event.aggregateRootId())
+                .tag("aggregate", event.getAggregateName())
+                .tag("uuid", event.uuid.toString())
+                .annotate(eventBody)
+                .start();
+
+        var notification = new Notification(
+                event.getClass().getTypeName(),
+                eventBody,
+                span.context().traceId(),
+                span.context().parentId(),
+                span.context().spanId(),
+                span.context().extra()
+        );
+        sender.sendWithPublishConfirms(buildOutboundMessage(event.type, notification))
                 .doOnError(e -> LOGGER.error("Send failed", e))
                 .subscribe(m -> {
                     if(m.isAck()) {
                         LOGGER.info("Message sent "+ event.type);
+                        span.finish();
                     }
                 });
 
@@ -42,7 +64,11 @@ public class RabbitMQEventPublisher implements EventPublisher {
     @Override
     public void publishError(Throwable errorEvent) {
         var event = new ErrorEvent(errorEvent.getClass().getTypeName(), errorEvent.getMessage());
-        sender.sendWithPublishConfirms(buildOutboundMessage(event))
+        var notification = new Notification(
+                event.getClass().getTypeName(),
+                eventSerializer.serialize(event),
+                null, null, null, null);
+        sender.sendWithPublishConfirms(buildOutboundMessage(event.type, notification))
                 .doOnError(e -> LOGGER.error("Send failed", e))
                 .subscribe(m -> {
                     if(m.isAck()) {
@@ -51,15 +77,13 @@ public class RabbitMQEventPublisher implements EventPublisher {
                 });
     }
 
-    private Mono<OutboundMessage> buildOutboundMessage(DomainEvent event) {
-        var notification = new Notification(
-                event.getClass().getTypeName(),
-                eventSerializer.serialize(event)
-        );
+    private Mono<OutboundMessage> buildOutboundMessage(String eventType, Notification notification) {
         return  Mono.just(new OutboundMessage(
-                configProperties.getExchange(), event.type, notification.serialize().getBytes()
+                configProperties.getExchange(), eventType, notification.serialize().getBytes()
         ));
     }
+
+
 
 
 }

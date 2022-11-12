@@ -31,6 +31,7 @@ public class IniciarJuegoUseCase extends UseCaseForCommand<IniciarJuegoCommand> 
                 .obtenerEventosPor(command.getJuegoId())
                 .collectList()
                 .flatMapMany(events -> {
+                    //TODO: validar que sea minimo dos jugadores
                     var juego = Juego.from(JuegoId.of(command.getJuegoId()), events);
 
                     var jugadoreIds = juego.jugadores().keySet();
@@ -41,6 +42,7 @@ public class IniciarJuegoUseCase extends UseCaseForCommand<IniciarJuegoCommand> 
                             20,
                             jugadoreIds.stream().map(Identity::value).collect(Collectors.toSet())
                     );
+
                     return crearRondaUseCase.apply(Mono.just(crearRondaCommand))
                             .mergeWith(Flux.fromIterable(juego.getUncommittedChanges()));
                 }));

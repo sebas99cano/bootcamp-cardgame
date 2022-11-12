@@ -5,6 +5,7 @@ import org.example.cardgame.generic.serialize.EventSerializer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.function.Function;
 
 public class IntegrationHandle implements Function<Flux<DomainEvent>, Mono<Void>> {
@@ -22,21 +23,22 @@ public class IntegrationHandle implements Function<Flux<DomainEvent>, Mono<Void>
 
     @Override
     public Mono<Void> apply(Flux<DomainEvent> events) {
-        return events.flatMap(domainEvent -> {
-            var stored = StoredEvent.wrapEvent(domainEvent, eventSerializer);
-            return repository.saveEvent(aggregate, domainEvent.aggregateRootId(), stored)
+        return events.onBackpressureDrop()
+                .delayElements(Duration.ofMillis(100))
+                .flatMap(domainEvent -> {
+                        var stored = StoredEvent.wrapEvent(domainEvent, eventSerializer);
+                        return repository.saveEvent(aggregate, domainEvent.aggregateRootId(), stored)
                     .thenReturn(domainEvent);
-        }).doOnNext(eventPublisher::publish)
-                .onErrorResume(errorEvent -> Mono.create(callback -> {
-                    if(errorEvent instanceof BusinessException){
-                        eventPublisher.publishError(errorEvent);
-                        callback.success();
-                    } else {
-                        errorEvent.printStackTrace();
-                        callback.error(errorEvent);
-                    }
-                }))
-                .then();
+                    }).doOnNext(eventPublisher::publish)
+                        .onErrorResume(errorEvent -> Mono.create(callback -> {
+                            if(errorEvent instanceof BusinessException){
+                                eventPublisher.publishError(errorEvent);
+                                callback.success();
+                            } else {
+                                errorEvent.printStackTrace();
+                                callback.error(errorEvent);
+                            }
+                })).then();
     }
 
 

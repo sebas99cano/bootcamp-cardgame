@@ -25,7 +25,9 @@ public class PonerCartaEnTableroUseCase extends UseCaseForCommand<PonerCartaEnTa
                 .obtenerEventosPor(command.getJuegoId())
                 .collectList()
                 .flatMapIterable(events -> {
+                    //TODO: servicio de dominio para obtener monedas de la billetera
                     var juego = Juego.from(JuegoId.of(command.getJuegoId()), events);
+
                     var tableroId = juego.tablero().identity();
                     var jugadorId = JugadorId.of(command.getJugadorId());
                     var cartaId = CartaMaestraId.of(command.getCartaId());

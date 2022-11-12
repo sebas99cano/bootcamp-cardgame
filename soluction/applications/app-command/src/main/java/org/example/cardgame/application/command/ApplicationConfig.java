@@ -1,6 +1,7 @@
 package org.example.cardgame.application.command;
 
 
+
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -50,11 +51,11 @@ public class ApplicationConfig {
 
     @PostConstruct
     public void init() {
-        var exchange = new TopicExchange(configProperties.getExchange());
+        var exchange1 = new TopicExchange(configProperties.getExchange());
         var queue = new Queue(configProperties.getQueue(), false, false, true);
-        amqpAdmin.declareExchange(exchange);
+        amqpAdmin.declareExchange(exchange1);
         amqpAdmin.declareQueue(queue);
-        amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with(configProperties.getRoutingKey()));
+        amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange1).with(configProperties.getRoutingKey()));
     }
 
     @Bean
@@ -112,6 +113,7 @@ public class ApplicationConfig {
 
         return new CorsWebFilter(source);
     }
+
 
 }
 

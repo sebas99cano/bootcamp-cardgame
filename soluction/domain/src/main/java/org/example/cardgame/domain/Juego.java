@@ -20,8 +20,8 @@ public class Juego extends AggregateRoot<JuegoId> {
 
     public Juego(JuegoId id, JugadorId uid, MontoRequerido montoRequerido) {
         super(id);
-        appendChange(new JuegoCreado(uid, montoRequerido)).apply();
         subscribe(new JuegoEventChange(this));
+        appendChange(new JuegoCreado(uid, montoRequerido)).apply();
     }
 
     private Juego(JuegoId id) {

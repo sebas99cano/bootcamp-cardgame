@@ -26,6 +26,6 @@ public class CuentaRegresivaEventHandle implements BusinessService {
 
     @Override
     public Mono<Void> doProcessing(DomainEvent event) {
-        return handle.apply(usecase.apply(Mono.just((RondaIniciada)event)));
+        return usecase.andThen(handle).apply(Mono.just((RondaIniciada)event));
     }
 }
