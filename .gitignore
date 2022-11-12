@@ -1,13 +1,16 @@
-backend/domain/target/
-backend/business/target/
-backend/applications/target/
+soluction/domain/target/
+soluction/business/target/
+soluction/applications/target/
 
 /.idea/
 frontend/web/.angular/
 frontend/web/.firebase/
 
-backend/cardgame.iml
-backend/applications/app-proxy/app-proxy.iml
-backend/applications/app-service/app-service.iml
-backend/applications/applications.iml
-backend/domain/domain.iml
+soluction/.idea/
+soluction/cardgame.iml
+soluction/applications/app-proxy/app-proxy.iml
+soluction/applications/app-command/app-command.iml
+soluction/applications/app-queries/app-queries.iml
+soluction/applications/applications.iml
+soluction/domain/domain.iml
+soluction/business/business.iml
