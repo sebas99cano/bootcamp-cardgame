@@ -51,6 +51,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                         Duration.ofSeconds(20), Duration.ofMillis(500),
                         ExceptionHandlers.CONNECTION_RECOVERY_PREDICATE
                 )))
+                .onBackpressureBuffer()
                 .flatMap(message -> {
                     var notification = Notification.from(new String(message.getBody()));
                     var context = TraceContext.newBuilder()
@@ -75,7 +76,6 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                                 .flatMap(materializeService -> materializeService.doProcessing(event))
                                 .then(Mono.defer(() -> {
                                     span.finish();
-                                    System.out.println("finish");
                                     return Mono.just(message);
                                 }));
                     } catch (ClassNotFoundException e) {

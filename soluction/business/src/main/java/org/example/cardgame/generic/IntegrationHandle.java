@@ -24,20 +24,21 @@ public class IntegrationHandle implements Function<Flux<DomainEvent>, Mono<Void>
     @Override
     public Mono<Void> apply(Flux<DomainEvent> events) {
         return events.onBackpressureDrop()
-                .delayElements(Duration.ofMillis(100))
+                .delayElements(Duration.ofMillis(50))
                 .flatMap(domainEvent -> {
-                        var stored = StoredEvent.wrapEvent(domainEvent, eventSerializer);
-                        return repository.saveEvent(aggregate, domainEvent.aggregateRootId(), stored)
-                    .thenReturn(domainEvent);
-                    }).doOnNext(eventPublisher::publish)
-                        .onErrorResume(errorEvent -> Mono.create(callback -> {
-                            if(errorEvent instanceof BusinessException){
-                                eventPublisher.publishError(errorEvent);
-                                callback.success();
-                            } else {
-                                errorEvent.printStackTrace();
-                                callback.error(errorEvent);
-                            }
+                    var stored = StoredEvent.wrapEvent(domainEvent, eventSerializer);
+                    return repository.saveEvent(aggregate, domainEvent.aggregateRootId(), stored)
+                            .thenReturn(domainEvent);
+                }, 1)
+                .doOnNext(eventPublisher::publish)
+                .onErrorResume(errorEvent -> Mono.create(callback -> {
+                    if (errorEvent instanceof BusinessException) {
+                        eventPublisher.publishError(errorEvent);
+                        callback.success();
+                    } else {
+                        errorEvent.printStackTrace();
+                        callback.error(errorEvent);
+                    }
                 })).then();
     }
 
