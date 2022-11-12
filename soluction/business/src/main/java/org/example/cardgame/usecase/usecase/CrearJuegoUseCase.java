@@ -19,10 +19,8 @@ public class CrearJuegoUseCase extends UseCaseForCommand<CrearJuegoCommand> {
                                 JugadorId.of(command.getJugadorPrincipalId()),
                                 new MontoRequerido(command.getMontoRequerido())
                         );
-                        juego.asignarJugador(
-                                JugadorId.of(command.getJugadorPrincipalId()),
-                                new Alias(command.getAlias())
-                        );
+
+                        juego.asignarJugador(JugadorId.of(command.getJugadorPrincipalId()),new Alias(command.getAlias()));
                         return juego.getUncommittedChanges();
                 });
     }
