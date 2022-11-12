@@ -1,6 +1,9 @@
 soluction/domain/target/
 soluction/business/target/
 soluction/applications/target/
+soluction/applications/app-queries/target/
+soluction/applications/app-command/target/
+soluction/applications/app-proxy/target/
 
 /.idea/
 frontend/web/.angular/
