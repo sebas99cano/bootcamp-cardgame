@@ -1,34 +1,35 @@
 package org.example.cardgame.domain.command;
 
+import org.example.cardgame.domain.Jugador;
+import org.example.cardgame.domain.values.Alias;
+import org.example.cardgame.domain.values.JuegoId;
+import org.example.cardgame.domain.values.JugadorId;
 import org.example.cardgame.generic.Command;
 
 
 public class UniserAlJuegoCommand extends Command {
-    private String juegoId;
-    private String jugadorId;
-    private String alias;
+    private final JuegoId juegoId;
+    private final JugadorId jugadorId;
+    private final Alias alias;
 
-    public String getJuegoId() {
+    public UniserAlJuegoCommand(JuegoId juegoId, JugadorId jugadorId, Alias alias) {
+        this.juegoId = juegoId;
+        this.jugadorId = jugadorId;
+        this.alias = alias;
+    }
+
+    public JuegoId getJuegoId() {
         return juegoId;
     }
 
-    public void setJuegoId(String juegoId) {
-        this.juegoId = juegoId;
-    }
 
-    public String getJugadorId() {
+    public JugadorId getJugadorId() {
         return jugadorId;
     }
 
-    public void setJugadorId(String jugadorId) {
-        this.jugadorId = jugadorId;
-    }
 
-    public String getAlias() {
+    public Alias getAlias() {
         return alias;
     }
 
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
 }

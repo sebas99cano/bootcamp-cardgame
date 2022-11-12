@@ -10,6 +10,9 @@ public class Alias implements ValueObject<String> {
 
     public Alias(String value) {
         this.value = Objects.requireNonNull(value);
+        if(this.value.isEmpty()){
+            throw new IllegalArgumentException("El alias no es valido");
+        }
     }
 
     @Override

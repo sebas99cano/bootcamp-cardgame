@@ -22,13 +22,13 @@ public class UnirseAlJuegoUseCase extends UseCaseForCommand<UniserAlJuegoCommand
     @Override
     public Flux<DomainEvent> apply(Mono<UniserAlJuegoCommand> uniserAlJuegoCommand) {
         return   uniserAlJuegoCommand.flatMapMany((command) -> repository
-                .obtenerEventosPor(command.getJuegoId())
+                .obtenerEventosPor(command.getJuegoId().value())
                 .collectList()
                 .flatMapIterable(events -> {
                     //TODO: la regla para el monto minimo
-                    var juego = Juego.from(JuegoId.of(command.getJuegoId()), events);
-                    var jugadorId = JugadorId.of(command.getJuegoId());
-                    juego.asignarJugador(jugadorId, new Alias(command.getAlias()));
+                    var juego = Juego.from(command.getJuegoId(), events);
+                    var jugadorId = command.getJugadorId();
+                    juego.asignarJugador(jugadorId, command.getAlias());
                     return juego.getUncommittedChanges();
                 }));
     }
