@@ -2,6 +2,7 @@ package org.example.cardgame.application.command.handle;
 
 import org.example.cardgame.application.command.handle.event.CuentaRegresivaEventHandle;
 import org.example.cardgame.application.command.handle.event.DeterminarGanadorEventHandle;
+import org.example.cardgame.application.command.handle.event.RepartirCartaEventHandle;
 import org.example.cardgame.generic.BusinessService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,9 @@ public class BusinessLookUp {
         );
         business.put("cardgame.rondainiciada", Flux.just(
                 context.getBean(CuentaRegresivaEventHandle.class)
+        ));
+        business.put("cardgame.tablerocreado", Flux.just(
+                context.getBean(RepartirCartaEventHandle.class)
         ));
     }
 

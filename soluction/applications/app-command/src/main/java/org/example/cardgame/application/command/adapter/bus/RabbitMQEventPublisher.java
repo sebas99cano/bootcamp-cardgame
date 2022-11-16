@@ -33,14 +33,7 @@ public class RabbitMQEventPublisher implements EventPublisher {
     public void publish(DomainEvent event) {
         var eventBody = eventSerializer.serialize(event);
 
-        Span span = tracer.nextSpan()
-                .name("publisher")
-                .tag("eventType", event.type)
-                .tag("aggregateRootId", event.aggregateRootId())
-                .tag("aggregate", event.getAggregateName())
-                .tag("uuid", event.uuid.toString())
-                .annotate(eventBody)
-                .start();
+        Span span = getSpan(event, eventBody);
 
         var notification = new Notification(
                 event.getClass().getTypeName(),
@@ -59,6 +52,17 @@ public class RabbitMQEventPublisher implements EventPublisher {
                     }
                 });
 
+    }
+
+    private Span getSpan(DomainEvent event, String eventBody) {
+        return tracer.nextSpan()
+                .name("publisher")
+                .tag("eventType", event.type)
+                .tag("aggregateRootId", event.aggregateRootId())
+                .tag("aggregate", event.getAggregateName())
+                .tag("uuid", event.uuid.toString())
+                .annotate(eventBody)
+                .start();
     }
 
     @Override
