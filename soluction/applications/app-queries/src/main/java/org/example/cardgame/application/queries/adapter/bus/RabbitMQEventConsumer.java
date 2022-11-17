@@ -4,7 +4,6 @@ package org.example.cardgame.application.queries.adapter.bus;
 import brave.Span;
 import brave.Tracer;
 import brave.Tracing;
-import brave.propagation.CurrentTraceContext;
 import brave.propagation.TraceContext;
 import org.example.cardgame.application.queries.ConfigProperties;
 import org.example.cardgame.application.queries.GsonEventSerializer;
@@ -28,15 +27,13 @@ import java.time.Duration;
 public class RabbitMQEventConsumer implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQEventConsumer.class);
     private final Tracer tracer;
-    private final Tracing tracing;
     private final GsonEventSerializer serializer;
     private final ConfigProperties configProperties;
     private final Receiver receiver;
     private final MaterializeLookUp materializeLookUp;
 
-    public RabbitMQEventConsumer(Tracer tracer, Tracing tracing, GsonEventSerializer serializer, ConfigProperties configProperties, Receiver receiver, MaterializeLookUp materializeLookUp) {
+    public RabbitMQEventConsumer(Tracer tracer,  GsonEventSerializer serializer, ConfigProperties configProperties, Receiver receiver, MaterializeLookUp materializeLookUp) {
         this.tracer = tracer;
-        this.tracing = tracing;
         this.serializer = serializer;
         this.configProperties = configProperties;
         this.receiver = receiver;
@@ -58,16 +55,17 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                             .parentId(notification.getParentId())
                             .spanId(notification.getSpanId())
                             .traceId(notification.getTraceId())
-                            .sampled(true)
                     .build();
                     try {
                         var event = serializer.deserialize(
                                 notification.getBody(), Class.forName(notification.getType())
                         );
-                        Span span = getSpan(notification, context, event);
+                        Span span = createSpan(notification, context, event);
                         return materializeLookUp.get(event.type)
+                                .doFirst(span::start)
                                 .flatMap(materializeService -> materializeService.doProcessing(event))
                                 .then(Mono.defer(() -> {
+                                    LOGGER.info(String.format("Message received %s", event.type));
                                     span.finish();
                                     return Mono.just(message);
                                 }));
@@ -78,7 +76,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                 }, 1).subscribe(AcknowledgableDelivery::ack);
     }
 
-    private Span getSpan(Notification notification, TraceContext context, DomainEvent event) {
+    private Span createSpan(Notification notification, TraceContext context, DomainEvent event) {
         return tracer.newChild(context)
                 .name("consumer")
                 .tag("eventType", event.type)
@@ -86,6 +84,6 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                 .tag("aggregate", event.getAggregateName())
                 .tag("uuid", event.uuid.toString())
                 .annotate(notification.getBody())
-                .start();
+                .kind(Span.Kind.SERVER);
     }
 }

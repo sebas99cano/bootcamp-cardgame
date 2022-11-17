@@ -1,7 +1,9 @@
 package org.example.cardgame.application.command.adapter.bus;
 
+import brave.Request;
 import brave.Span;
 import brave.Tracer;
+import brave.Tracing;
 import org.example.cardgame.application.command.ConfigProperties;
 import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.ErrorEvent;
@@ -18,6 +20,7 @@ import reactor.rabbitmq.Sender;
 public class RabbitMQEventPublisher implements EventPublisher {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQEventPublisher.class);
     private final Tracer tracer;
+
     private final Sender sender;
     private final EventSerializer eventSerializer;
     private final ConfigProperties configProperties;
@@ -33,8 +36,7 @@ public class RabbitMQEventPublisher implements EventPublisher {
     public void publish(DomainEvent event) {
         var eventBody = eventSerializer.serialize(event);
 
-        Span span = getSpan(event, eventBody);
-
+        Span span = createSpan(event, eventBody).start();
         var notification = new Notification(
                 event.getClass().getTypeName(),
                 eventBody,
@@ -47,14 +49,14 @@ public class RabbitMQEventPublisher implements EventPublisher {
                 .doOnError(e -> LOGGER.error("Send failed", e))
                 .subscribe(m -> {
                     if(m.isAck()) {
-                        LOGGER.info("Message sent "+ event.type);
+                        LOGGER.info(String.format("Message sent %s", event.type));
                         span.finish();
                     }
                 });
 
     }
 
-    private Span getSpan(DomainEvent event, String eventBody) {
+    private Span createSpan(DomainEvent event, String eventBody) {
         return tracer.nextSpan()
                 .name("publisher")
                 .tag("eventType", event.type)
@@ -62,7 +64,8 @@ public class RabbitMQEventPublisher implements EventPublisher {
                 .tag("aggregate", event.getAggregateName())
                 .tag("uuid", event.uuid.toString())
                 .annotate(eventBody)
-                .start();
+                .remoteServiceName("rabbitmq")
+                .kind(Span.Kind.CLIENT);
     }
 
     @Override
@@ -76,7 +79,7 @@ public class RabbitMQEventPublisher implements EventPublisher {
                 .doOnError(e -> LOGGER.error("Send failed", e))
                 .subscribe(m -> {
                     if(m.isAck()) {
-                        LOGGER.error("Message sent "+ event.type);
+                        LOGGER.info(String.format("Message sent %s", event.type));
                     }
                 });
     }

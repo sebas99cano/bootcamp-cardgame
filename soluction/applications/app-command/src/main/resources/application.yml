@@ -3,7 +3,7 @@ server:
   origin: ${ORIGIN:*}
 spring:
   application:
-    name: gamecommands
+    name: game-commands
   main:
     banner-mode: off
   output:
@@ -14,6 +14,9 @@ spring:
   data:
     mongodb:
         uri: ${MONGO_URI:mongodb://localhost:27017/game-events}
+  sleuth:
+    sampler:
+      percentage: 1.0
 
 microservice:
   exchange: ${EXCHANGE:core-game}

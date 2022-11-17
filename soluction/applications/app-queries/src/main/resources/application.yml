@@ -14,6 +14,9 @@ spring:
   data:
     mongodb:
         uri: ${MONGO_URI:mongodb://localhost:27017/game-view}
+  sleuth:
+    sampler:
+      percentage: 1.0
 microservice:
   exchange: ${EXCHANGE:core-game}
   queue: ${QUEUE:game.queryhandles}

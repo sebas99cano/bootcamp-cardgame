@@ -52,11 +52,11 @@ public class ApplicationConfig {
 
     @PostConstruct
     public void init() {
-        var exchange1 = new TopicExchange(configProperties.getExchange());
+        var exchange = new TopicExchange(configProperties.getExchange());
         var queue = new Queue(configProperties.getQueue(), false, false, true);
-        amqpAdmin.declareExchange(exchange1);
+        amqpAdmin.declareExchange(exchange);
         amqpAdmin.declareQueue(queue);
-        amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange1).with(configProperties.getRoutingKey()));
+        amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with(configProperties.getRoutingKey()));
     }
 
     @Bean
