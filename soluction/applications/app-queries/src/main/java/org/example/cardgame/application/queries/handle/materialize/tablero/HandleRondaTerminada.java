@@ -23,14 +23,23 @@ public class HandleRondaTerminada  implements MaterializeService {
     @Override
     public Mono<Void> doProcessing(DomainEvent input) {
         var event = (RondaTerminada)input;
+        System.out.println(event);
         return repository.findById(event.aggregateRootId()).flatMap(tablero -> {
             var jugadores = event.getJugadorIds().stream()
                     .map(Identity::value)
                     .collect(Collectors.toSet());
             tablero.setTiempo(0);
-            tablero.getRonda().setJugadores(jugadores);
-            tablero.getRonda().setEstaIniciada(false);
-            tablero.getTablero().setCartas(new HashMap<>());
+            var rondaModel = tablero.getRonda();
+            var tableroModel = tablero.getTablero();
+
+            rondaModel.setJugadores(jugadores);
+            rondaModel.setEstaIniciada(false);
+            tableroModel.setCartas(new HashMap<>());
+            tableroModel.setHabilitado(false);
+
+            tablero.setTablero(tableroModel);
+            tablero.setRonda(rondaModel);
+
             return repository.save(tablero);
         }).then();
     }

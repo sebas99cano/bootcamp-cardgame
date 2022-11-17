@@ -22,6 +22,7 @@ public class HandleRondaIniciada  implements MaterializeService {
         var event = (RondaIniciada)input;
         return repository.findById(event.aggregateRootId()).flatMap(tablero -> {
             tablero.getTablero().setHabilitado(true);
+            tablero.getRonda().setEstaIniciada(true);
             return repository.save(tablero);
         }).then();
     }

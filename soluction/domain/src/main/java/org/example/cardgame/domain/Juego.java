@@ -45,6 +45,11 @@ public class Juego extends AggregateRoot<JuegoId> {
 
     public void cambiarTiempoDelTablero(TableroId tableroId, TiempoLimite tiempoLimite) {
         appendChange(new TiempoCambiadoDelTablero(tableroId, tiempoLimite)).apply();
+
+        if(tiempoLimite.value() == 1){
+            appendChange(new CuentaRegresivaFinalizada()).apply();
+        }
+
     }
 
     public void ponerCartaEnTablero(TableroId tableroId, JugadorId jugadorId, Carta carta) {

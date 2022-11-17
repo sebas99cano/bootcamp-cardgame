@@ -43,7 +43,11 @@ public class JuegoEventChange extends EventChange {
         });
 
         apply((CartaPuestaEnTablero event) -> {
+            if(juego.tablero.estaHabilitado().equals(Boolean.FALSE)){
+                throw new IllegalArgumentException("No puedes poner la carta en el tablero");
+            }
             juego.tablero.adicionarPartida(event.getJugadorId(), event.getCarta());
+
         });
 
         apply((CartaQuitadaDelTablero event) -> {

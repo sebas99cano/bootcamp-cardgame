@@ -17,11 +17,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class IniciarCuentaRegresivaUseCase extends UseCaseForEvent<RondaIniciada> {
 
     private final JuegoDomainEventRepository repository;
-    private final FinalizarRondaUseCase finalizarRondaUseCase;
 
-    public IniciarCuentaRegresivaUseCase(JuegoDomainEventRepository repository, FinalizarRondaUseCase finalizarRondaUseCase){
+    public IniciarCuentaRegresivaUseCase(JuegoDomainEventRepository repository){
         this.repository = repository;
-        this.finalizarRondaUseCase = finalizarRondaUseCase;
     }
 
     @Override
@@ -43,11 +41,6 @@ public class IniciarCuentaRegresivaUseCase extends UseCaseForEvent<RondaIniciada
                                 juego.markChangesAsCommitted();
                                 var nuevoTiempo = tiempo - acumulador.getAndIncrement();
                                 juego.cambiarTiempoDelTablero(tableroId, new TiempoLimite(nuevoTiempo));
-
-                                if(nuevoTiempo == 1){
-                                    return finalizarRondaUseCase.apply(Mono.just(finalizarCommand))
-                                            .mergeWith(Flux.fromIterable(juego.getUncommittedChanges()));
-                                }
                                 return Flux.fromIterable(juego.getUncommittedChanges());
                             });
                 }));

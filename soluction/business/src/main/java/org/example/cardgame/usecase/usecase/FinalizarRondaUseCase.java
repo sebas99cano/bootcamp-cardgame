@@ -1,19 +1,19 @@
 package org.example.cardgame.usecase.usecase;
 
 import org.example.cardgame.domain.Juego;
-import org.example.cardgame.domain.command.FinalizarRondaCommand;
+import org.example.cardgame.domain.events.CuentaRegresivaFinalizada;
 import org.example.cardgame.domain.values.Carta;
 import org.example.cardgame.domain.values.JuegoId;
 import org.example.cardgame.domain.values.JugadorId;
 import org.example.cardgame.generic.DomainEvent;
-import org.example.cardgame.generic.UseCaseForCommand;
+import org.example.cardgame.generic.UseCaseForEvent;
 import org.example.cardgame.usecase.gateway.JuegoDomainEventRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
 
-public class FinalizarRondaUseCase extends UseCaseForCommand<FinalizarRondaCommand> {
+public class FinalizarRondaUseCase extends UseCaseForEvent<CuentaRegresivaFinalizada> {
 
     private final JuegoDomainEventRepository repository;
 
@@ -22,12 +22,12 @@ public class FinalizarRondaUseCase extends UseCaseForCommand<FinalizarRondaComma
     }
 
     @Override
-    public Flux<DomainEvent> apply(Mono<FinalizarRondaCommand> finalizarRondaCommand) {
-        return finalizarRondaCommand.flatMapMany(command -> repository
-                .obtenerEventosPor(command.getJuegoId())
+    public Flux<DomainEvent> apply(Mono<CuentaRegresivaFinalizada> cuentaRegresivaFinalizada) {
+        return cuentaRegresivaFinalizada.flatMapMany(event -> repository
+                .obtenerEventosPor(event.aggregateRootId())
                 .collectList()
                 .flatMapIterable(events -> {
-                    var juego = Juego.from(JuegoId.of(command.getJuegoId()), events);
+                    var juego = Juego.from(JuegoId.of(event.aggregateRootId()), events);
 
                     var partidaOrdenada = obtenerMejorPartidaDel(juego);
                     var competidores = obtenerIdsDeLa(partidaOrdenada);

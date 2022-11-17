@@ -8,6 +8,8 @@ import org.example.cardgame.generic.DomainEvent;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
+
 
 @Component
 public class HandleCartaPuestaEnTablero implements MaterializeService {
@@ -29,8 +31,12 @@ public class HandleCartaPuestaEnTablero implements MaterializeService {
             cartaViewModel.setEstaHabilitada(carta.estaHabilitada());
             cartaViewModel.setJugadorId(event.getJugadorId().value());
 
-            tablero.getTablero().getCartas().get(event.getJugadorId().value())
-                    .put(carta.cartaId().value(), cartaViewModel);
+            var cartas = tablero.getTablero()
+                    .getCartas()
+                    .getOrDefault(event.getJugadorId().value(), new HashMap<>());
+
+            cartas.put(carta.cartaId().value(), cartaViewModel);
+            tablero.getTablero().getCartas().put(event.getJugadorId().value(), cartas);
 
             return repository.save(tablero);
         }).then();

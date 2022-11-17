@@ -37,9 +37,9 @@ public class HandleRondaCreada  implements MaterializeService {
             rondaModelView.setJugadores(jugadores);
             rondaModelView.setEstaIniciada(false);
             rondaModelView.setNumero(ronda.numero());
-
             tablero.setTiempo(event.getTiempoLimite().value());
             tablero.setRonda(rondaModelView);
+            tablero.getTablero().setHabilitado(false);
             return repository.save(tablero);
         }).then();
 
