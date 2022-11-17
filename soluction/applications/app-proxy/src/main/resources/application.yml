@@ -1,8 +1,6 @@
 server:
   port: 8082
   origin: ${ORIGIN:*}
-  servlet:
-    context-path: /proxy
 spring:
   main:
     banner-mode: off

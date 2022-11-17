@@ -52,7 +52,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                         ExceptionHandlers.CONNECTION_RECOVERY_PREDICATE
                 )))
                 .onBackpressureBuffer()
-                .flatMap(message -> {
+                .flatMapSequential(message -> {
                     var notification = Notification.from(new String(message.getBody()));
                     var context = TraceContext.newBuilder()
                             .parentId(notification.getParentId())
@@ -64,14 +64,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                         var event = serializer.deserialize(
                                 notification.getBody(), Class.forName(notification.getType())
                         );
-                        Span span = tracer.newChild(context)
-                                .name("consumer")
-                                .tag("eventType", event.type)
-                                .tag("aggregateRootId", event.aggregateRootId())
-                                .tag("aggregate", event.getAggregateName())
-                                .tag("uuid", event.uuid.toString())
-                                .annotate(notification.getBody())
-                                .start();
+                        Span span = getSpan(notification, context, event);
                         return materializeLookUp.get(event.type)
                                 .flatMap(materializeService -> materializeService.doProcessing(event))
                                 .then(Mono.defer(() -> {
@@ -82,6 +75,17 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                        throw new IllegalArgumentException();
                     }
 
-                }).subscribe(AcknowledgableDelivery::ack);
+                }, 1).subscribe(AcknowledgableDelivery::ack);
+    }
+
+    private Span getSpan(Notification notification, TraceContext context, DomainEvent event) {
+        return tracer.newChild(context)
+                .name("consumer")
+                .tag("eventType", event.type)
+                .tag("aggregateRootId", event.aggregateRootId())
+                .tag("aggregate", event.getAggregateName())
+                .tag("uuid", event.uuid.toString())
+                .annotate(notification.getBody())
+                .start();
     }
 }

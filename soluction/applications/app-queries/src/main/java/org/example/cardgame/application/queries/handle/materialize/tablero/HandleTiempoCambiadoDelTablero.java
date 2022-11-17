@@ -23,7 +23,7 @@ public class HandleTiempoCambiadoDelTablero implements MaterializeService {
     public Mono<Void> doProcessing(DomainEvent input) {
         var event = (TiempoCambiadoDelTablero)input;
 
-        return repository.findById(event.getTableroId().value()).flatMap(tablero -> {
+        return repository.findById(event.aggregateRootId()).flatMap(tablero -> {
             tablero.setTiempo(event.getTiempoLimite().value());
             return repository.save(tablero);
         }).then();

@@ -34,17 +34,12 @@ public class CrearRondaUseCase extends UseCaseForCommand<CrearRondaCommand> {
                             .map(JugadorId::of)
                             .collect(Collectors.toSet());
 
-                    Optional.ofNullable(juego.ronda())
-                            .ifPresentOrElse(
-                                    ronda -> juego.crearRonda(
-                                            ronda.incrementarRonda(jugadores),
-                                            new TiempoLimite(command.getTiempo())
-                                    ),
-                                    () -> juego.crearRonda(
-                                            new Ronda(1, jugadores),
-                                            new TiempoLimite(command.getTiempo())
-                                    )
-                            );
+                    var ronda = Optional.ofNullable(juego.ronda())
+                            .orElseThrow(() -> new IllegalArgumentException("Es necesaria la primera ronda"));
+                    juego.crearRonda(
+                            ronda.incrementarRonda(jugadores),
+                            new TiempoLimite(command.getTiempo())
+                    );
                     return juego.getUncommittedChanges();
                 }));
     }

@@ -17,7 +17,7 @@ public class Carta implements ValueObject<Carta.Props>, Comparable<Carta> {
         this.estaOculta =  Objects.requireNonNull(estaOculta);
         this.estaHabilitada =  Objects.requireNonNull(estaHabilitada);
         this.poder =  Objects.requireNonNull(poder);
-        if(0 <= poder){
+        if(0 >= poder){
             throw new IllegalArgumentException("El valor debe tener un poder positivo");
         }
     }

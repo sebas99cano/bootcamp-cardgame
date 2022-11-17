@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -91,7 +92,7 @@ public class ApplicationConfig {
 
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
-        return new ReactiveMongoTemplate(mongoClient, configProperties.getStoreName()+"db");
+        return new ReactiveMongoTemplate(mongoClient, "game-events");
     }
 
     @Bean

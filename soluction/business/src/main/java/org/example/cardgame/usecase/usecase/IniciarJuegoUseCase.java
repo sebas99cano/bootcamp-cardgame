@@ -1,9 +1,11 @@
 package org.example.cardgame.usecase.usecase;
 
 import org.example.cardgame.domain.Juego;
+import org.example.cardgame.domain.command.CrearRondaCommand;
 import org.example.cardgame.domain.command.IniciarJuegoCommand;
 import org.example.cardgame.domain.values.*;
 import org.example.cardgame.generic.DomainEvent;
+import org.example.cardgame.generic.Identity;
 import org.example.cardgame.generic.UseCaseForCommand;
 import org.example.cardgame.usecase.gateway.JuegoDomainEventRepository;
 
@@ -16,9 +18,11 @@ import java.util.stream.Collectors;
 public class IniciarJuegoUseCase extends UseCaseForCommand<IniciarJuegoCommand> {
 
     private final JuegoDomainEventRepository repository;
+    private final CrearRondaUseCase crearRondaUseCase;
 
-    public IniciarJuegoUseCase(JuegoDomainEventRepository repository) {
+    public IniciarJuegoUseCase(JuegoDomainEventRepository repository,  CrearRondaUseCase crearRondaUseCase) {
         this.repository = repository;
+        this.crearRondaUseCase = crearRondaUseCase;
     }
 
     @Override
