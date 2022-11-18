@@ -21,7 +21,7 @@ public class HandleCartasAsignadasAJugador  implements MaterializeService {
     @Override
     public Mono<Void> doProcessing(DomainEvent input) {
         var event = (CartasAsignadasAJugador)input;
-        return repository.findByUid(event.getGanadorId().value()).flatMap(mazo -> {
+        return repository.findByJuegoIdAndUid(event.aggregateRootId(), event.getGanadorId().value()).flatMap(mazo -> {
             event.getCartasApuesta().forEach(carta -> {
                 var cartaModelView = new MazoViewModel.Carta();
                 cartaModelView.setEstaHabilitada(carta.value().estaHabilitada());

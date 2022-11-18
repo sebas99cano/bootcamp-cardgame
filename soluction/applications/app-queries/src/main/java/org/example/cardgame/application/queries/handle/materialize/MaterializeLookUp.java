@@ -41,7 +41,7 @@ public class MaterializeLookUp {
         business.put("cardgame.rondainiciada", Flux.just(
                 context.getBean(HandleRondaIniciada.class)
         ));
-        business.put("cardgame.rondaTterminada", Flux.just(
+        business.put("cardgame.rondaterminada", Flux.just(
                 context.getBean(HandleRondaTerminada.class)
         ));
         business.put("cardgame.tablerocreado", Flux.just(
