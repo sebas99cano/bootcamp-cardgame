@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
   origin: ${ORIGIN:*}
 spring:
   sleuth: # All sleuth features disabled for integration tests
@@ -15,7 +15,3 @@ spring:
           enabled: false
   zipkin: # All zipkin features disabled for integration tests
     enabled: false
-
-
-
-
