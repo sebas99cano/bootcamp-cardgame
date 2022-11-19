@@ -66,8 +66,7 @@ public class QueryBaseIntegrationTest {
     protected RestDocumentationFilter getSpecDoc(String name, RequestFieldsSnippet requestFieldsSnippet) {
         return document(name,
                 preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestFieldsSnippet
+                preprocessResponse(prettyPrint())
         );
     }
 }
