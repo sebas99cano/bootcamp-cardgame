@@ -1,23 +1,25 @@
 package org.example.cardgame.application.command;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.example.cardgame.application.command.AppCommand;
-import org.example.cardgame.generic.Command;
-import org.example.cardgame.generic.DomainEvent;
-import org.example.cardgame.generic.EventPublisher;
+import org.example.cardgame.domain.values.Alias;
+import org.example.cardgame.generic.*;
 import org.example.cardgame.generic.serialize.AbstractSerializer;
 import org.example.cardgame.generic.serialize.EventSerializer;
+import org.example.cardgame.usecase.gateway.ListaDeCartaService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -28,11 +30,15 @@ import org.springframework.restdocs.operation.OperationResponseFactory;
 import org.springframework.restdocs.operation.preprocess.OperationPreprocessor;
 import org.springframework.restdocs.payload.RequestFieldsSnippet;
 import org.springframework.restdocs.restassured3.RestDocumentationFilter;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.lang.reflect.Type;
+import java.time.Instant;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -50,6 +56,7 @@ public class CommandBaseIntegrationTest {
 
     @SpyBean
     private EventPublisher bus;
+
 
     @Captor
     private ArgumentCaptor<DomainEvent> eventArgumentCaptor;
@@ -73,14 +80,14 @@ public class CommandBaseIntegrationTest {
         RestAssured.baseURI = "http://localhost";
     }
 
-    protected void executor(Command request, String path, RequestFieldsSnippet requestFieldsSnippet, int numEvents) {
-        RestDocumentationFilter docs = getSpecDoc(numEvents, request.getClass().getSimpleName().toLowerCase(),
+    protected void executor(Map<String, Object> request, String command, String path, RequestFieldsSnippet requestFieldsSnippet, int numEvents) {
+        RestDocumentationFilter docs = getSpecDoc(numEvents, command,
                 requestFieldsSnippet
         );
         given(documentationSpec)
                 .filter(docs)
                 .contentType(ContentType.JSON)
-                .body(new GsonCommandSerializer().serialize(request))
+                .body(new Gson().toJson(request))
                 .when()
                 .post(path)
                 .then()
@@ -111,15 +118,4 @@ public class CommandBaseIntegrationTest {
         );
     }
 
-
-    public final class GsonCommandSerializer extends AbstractSerializer  {
-
-        public <T extends Command> T deserialize(String aSerialization, Class<?> aType) {
-            return gson.fromJson(aSerialization, (Type) aType);
-        }
-
-        public String serialize(Command object) {
-            return gson.toJson(object);
-        }
-    }
 }

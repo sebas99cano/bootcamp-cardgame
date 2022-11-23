@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
 import {CrearJuegoCommand} from '../commands/crearJuegoCommand';
-import {CrearRondaCommand} from '../commands/crearRondaCommand';
+import {UnirseAlJuegoCommand} from '../commands/unirseAlJuegoCommand';
 import {IniciarJuegoCommand} from '../commands/iniciarJuegoCommand';
 import {IniciarRondaCommand} from '../commands/iniciarRondaCommand';
 import {PonerCartaEnTableroCommand} from '../commands/ponerCartaEnTableroCommand';
@@ -30,8 +30,8 @@ export class ApiService {
     return this.http.post(environment.apiBaseCommand + '/juego/iniciar', command);
   }
 
-  crearRonda(command: CrearRondaCommand){
-    return this.http.post(environment.apiBaseCommand + '/juego/crear/ronda', command);
+  unirse(command: UnirseAlJuegoCommand){
+    return this.http.post(environment.apiBaseCommand + '/juego/unirse', command);
   }
 
   iniciarRonda(command: IniciarRondaCommand){
@@ -55,11 +55,15 @@ export class ApiService {
     return this.http.get<JuegoModel[]>(environment.apiBaseQuery + '/juego/listar/' + uid);
    }
 
+  getJuegos(): Observable<JuegoModel[]> {
+    return this.http.get<JuegoModel[]>(environment.apiBaseQuery + '/juego/todos');
+  }
+
   getMiMazo(uid: string, juegoId: string) {
     return this.http.get(environment.apiBaseQuery + '/juego/mazo/' + juegoId + '/' + uid);
   }
 
   getTablero(juegoId: string): Observable<TableroModel> {
-    return this.http.get<TableroModel>(environment.apiBaseQuery + '/juego/' + juegoId);
+    return this.http.get<TableroModel>(environment.apiBaseQuery + '/juego/tablero/' + juegoId);
   }
 }

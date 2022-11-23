@@ -17,9 +17,6 @@ spring:
   sleuth:
     sampler:
       percentage: 1.0
-    web:
-      client:
-        enabled: true
 microservice:
   exchange: ${EXCHANGE:core-game}
   queue: ${QUEUE:game.commandhandles}

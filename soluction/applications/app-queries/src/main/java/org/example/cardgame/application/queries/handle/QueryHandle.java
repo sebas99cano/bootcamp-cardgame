@@ -48,6 +48,17 @@ public class QueryHandle {
         );
     }
 
+    @Bean
+    public RouterFunction<ServerResponse> listarTodosJuego() {
+        return route(
+                GET("/juego/todos"),
+                request -> juegoListViewModelRepository.findAll()
+                        .collectList()
+                        .flatMap(list -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(BodyInserters.fromPublisher(Flux.fromIterable(list), JuegoListViewModel.class)))
+        );
+    }
 
     @Bean
     public RouterFunction<ServerResponse> obtenerTablero() {

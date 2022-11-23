@@ -36,7 +36,7 @@ public class RabbitMQEventPublisher implements EventPublisher {
     public void publish(DomainEvent event) {
         var eventBody = eventSerializer.serialize(event);
 
-        Span span = createSpan(event, eventBody).start();
+        Span span = createSpan(event, eventBody, null).start();
         var notification = new Notification(
                 event.getClass().getTypeName(),
                 eventBody,
@@ -56,7 +56,7 @@ public class RabbitMQEventPublisher implements EventPublisher {
 
     }
 
-    private Span createSpan(DomainEvent event, String eventBody) {
+    private Span createSpan(DomainEvent event, String eventBody, Throwable error) {
         return tracer.nextSpan()
                 .name("publisher")
                 .tag("eventType", event.type)
@@ -64,17 +64,23 @@ public class RabbitMQEventPublisher implements EventPublisher {
                 .tag("aggregate", event.getAggregateName())
                 .tag("uuid", event.uuid.toString())
                 .annotate(eventBody)
-                .remoteServiceName("rabbitmq")
+                .error(error)
                 .kind(Span.Kind.CLIENT);
     }
 
     @Override
     public void publishError(Throwable errorEvent) {
         var event = new ErrorEvent(errorEvent.getClass().getTypeName(), errorEvent.getMessage());
+        var eventBody = eventSerializer.serialize(event);
+        Span span = createSpan(event, eventBody, errorEvent).start();
         var notification = new Notification(
                 event.getClass().getTypeName(),
-                eventSerializer.serialize(event),
-                null, null, null, null);
+                eventBody,
+                span.context().traceId(),
+                span.context().parentId(),
+                span.context().spanId(),
+                span.context().extra()
+        );
         sender.sendWithPublishConfirms(buildOutboundMessage(event.type, notification))
                 .doOnError(e -> LOGGER.error("Send failed", e))
                 .subscribe(m -> {

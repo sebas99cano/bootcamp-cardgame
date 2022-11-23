@@ -72,7 +72,7 @@ export class AuthService {
     );
     const userData: User = {
       uid: user.uid,
-      alias: user.alias,
+      alias: user.displayName,
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
@@ -85,7 +85,7 @@ export class AuthService {
   signOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      //this.router.navigate(['login']);
+      this.router.navigate(['login']);
     });
   }
 }

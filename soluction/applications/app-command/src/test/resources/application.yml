@@ -1,6 +1,3 @@
-server:
-  port: 8080
-  origin: ${ORIGIN:*}
 spring:
   sleuth: # All sleuth features disabled for integration tests
     enabled: false

@@ -6,18 +6,32 @@ Raul A. Alzate <raul.alzate@sofka.com.co>;
 :toc: left
 :sectnums:
 
-== Intro
+== INTRODUCCIÓN
+En esta documentación encontraras la manera en la que la API esta construida, lo que debes saber del microservicio de comandos.
 
-Comando para juego de cartas
+== ARQUITECTURA
+[plantuml,auth-protocol]
+....
+UI -> "Command Handle": [POST] Request Command
+"Command Handle" -> UI: Response OK 200
+"Command Handle" --> "Use Case": Executor Async
+"Use Case" -> Aggregate: Behavior
+Aggregate -> Aggregate: Event Change
+Aggregate -> "Use Case": Emit Domain Events
+"Use Case" -> Infrastructure: Domain Events
+Infrastructure --> UI: Domain Events
+....
 
 [TIP]
-If possible, create the aggregateId from the consumer rest (client), since it would be easily accessible for queries through that id.
-Use UUID that guarantees a unique identity.
+Tener en cuenta los elementos integrados que facilita el funcionamiento de esta API, como son el broker de mensajeria y el almacenamiento de de datos
+
 
 == Crear Juego
-
-operation::crearjuegocommand[snippets='request-fields,http-request']
+include::{snippets}/crearjuegocommand/request-fields.adoc[]
+include::{snippets}/crearjuegocommand/http-request.adoc[]
 
 === Domain Event
-
 include::{snippets}/crearjuegocommand/response-body.adoc[]
+
+{snippets}
+

@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Carta } from 'src/app/shared/model/mazo';
-import { Jugador } from 'src/app/shared/model/juego';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { WebsocketService } from 'src/app/shared/services/websocket.service';
-import { Clipboard } from '@angular/cdk/clipboard';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -34,8 +32,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public ws: WebsocketService,
     private route: ActivatedRoute,
-    private router: Router,
-    private clipboard: Clipboard) {
+    private router: Router) {
 
   }
 
@@ -54,7 +51,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
         Object.entries(element.tablero.cartas)
           .forEach((a: any) => {
-            const cards = Object.keys(a[1]);
+            const cards = Object.keys(a[1]);           
             cards.forEach((d: any) => {
               this.cartasDelTablero.push(a[1][d]);
             })

@@ -5,13 +5,13 @@
       <table class="gamelist">
         <tr>
           <th>#</th>
-          <th>Jugadores</th> <!--[ngSwitch]="auth.isLoggedIn"><span *ngSwitchCase="true">Inicio</span></a>-->
+          <th>Jugadores</th> 
           <th></th>
         </tr>
 
         <tr align="center" *ngFor="let juego of juegos; index as i" [ngSwitch]="juego.finalizado">
           <td>
-             {{ i + 1 }}
+             {{ i + 1 }} {{juego.id.substr(0,8)}}
           </td>
 
           <td>
@@ -20,15 +20,15 @@
             </span>
           </td>
 
-          <td *ngSwitchCase="false" [ngSwitch]="juego.iniciado" >
-            <button *ngSwitchCase="false" value="{{ juego.id }}" (click)="startGame(juego.id)">
+          <td  *ngIf="!juego.finalizado" [ngSwitch]="!juego.iniciado && juego.uid === uid " >
+            <button *ngSwitchCase="true" value="{{ juego.id }}" (click)="startGame(juego.id)">
               Iniciar
             </button>
-            <button class="join" *ngSwitchCase="true" value="{{ juego.id }}" (click)="joinGame(juego.id)">
+            <button class="join" *ngSwitchCase="false" value="{{ juego.id }}" (click)="joinGame(juego.id)">
               Unirse
             </button>
           </td>
-          <td *ngSwitchCase="true">
+          <td *ngIf="juego.finalizado" >
               <span class="fin">Juego Finalizado</span>
           </td>
         </tr>
