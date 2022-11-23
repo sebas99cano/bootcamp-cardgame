@@ -45,7 +45,7 @@ public class WorkFlowIntegrationTest extends CommandBaseIntegrationTest{
                 fieldWithPath("jugadorId").description("ID del Jugador Principal"),
                 fieldWithPath("alias").description("El Alias del Jugador Principal")
 
-        ), 2);
+        ), 1);
     }
 
 
@@ -63,7 +63,7 @@ public class WorkFlowIntegrationTest extends CommandBaseIntegrationTest{
                 "juegoId", "1"
         ), "iniciarjuegocommand","/juego/iniciar", requestFields(
                 fieldWithPath("juegoId").description("ID del Juego")
-        ), 1);
+        ), 2);
     }
 
 
