@@ -20,9 +20,6 @@ public class JuegoEventChange extends EventChange {
         });
 
         apply((MazoAsignadoAJugador event) -> {
-            if (Objects.isNull(juego.tablero)) {
-                throw new IllegalArgumentException("Debe existir el tablero primero");
-            }
             juego.jugadores.get(event.getJugadorId()).asignarMazo(event.getMazo());
         });
 

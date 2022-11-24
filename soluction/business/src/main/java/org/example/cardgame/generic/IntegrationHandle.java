@@ -7,8 +7,10 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.function.Function;
+import java.util.logging.Logger;
 
 public class IntegrationHandle implements Function<Flux<DomainEvent>, Mono<Void>> {
+    private static final Logger LOGGER = Logger.getLogger(IntegrationHandle.class.getSimpleName());
     private final String aggregate;
     private final EventStoreRepository repository;
     private final EventPublisher eventPublisher;
@@ -27,6 +29,7 @@ public class IntegrationHandle implements Function<Flux<DomainEvent>, Mono<Void>
                 .delayElements(Duration.ofMillis(50))
                 .flatMap(domainEvent -> {
                     var stored = StoredEvent.wrapEvent(domainEvent, eventSerializer);
+                    LOGGER.info("saved => "+stored.getTypeName());
                     return repository.saveEvent(aggregate, domainEvent.aggregateRootId(), stored)
                             .thenReturn(domainEvent);
                 }, 1)

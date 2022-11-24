@@ -40,7 +40,7 @@ public class ApplicationConfig {
 
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
-        return new ReactiveMongoTemplate(mongoClient, "game-events");
+        return new ReactiveMongoTemplate(mongoClient, "master");
     }
 
 

@@ -10,14 +10,17 @@ spring:
   application:
     name: game-queries
   rabbitmq:
-    addresses: ${RABBITMQ_URI:amqp://guest:guest@localhost:5672}  
+    addresses: ${RABBITMQ_URI:amqps://kjtvgvhd:bHmdR5lNP-mrTr-lhe20E1Zvk1NjoBbC@chimpanzee.rmq.cloudamqp.com/kjtvgvhd}
   data:
     mongodb:
-        uri: ${MONGO_URI:mongodb://localhost:27017/game-view}
+        uri: ${MONGO_URI:mongodb+srv://cardgameuser:cHCoyN5zPgLTkLGs@cardgamedb.isainvn.mongodb.net/game-views?retryWrites=true&w=majority}
   sleuth:
     sampler:
       percentage: 1.0
+  zipkin: # All zipkin features disabled for integration tests
+    enabled: false
 microservice:
   exchange: ${EXCHANGE:core-game}
   queue: ${QUEUE:game.queryhandles}
   routingKey: ${ROUTING_KEY:cardgame.#}
+

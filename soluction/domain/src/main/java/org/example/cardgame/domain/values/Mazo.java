@@ -16,9 +16,6 @@ public class Mazo implements ValueObject<Mazo.Props> {
     public Mazo(Set<Carta> catas) {
         this.catas = Objects.requireNonNull(catas);
         this.cantidad = catas.size();
-        if(this.cantidad <= 0){
-            throw new IllegalArgumentException("El mazo debe tener cartas, al menos una.");
-        }
     }
 
     @Override
