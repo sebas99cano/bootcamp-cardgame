@@ -64,11 +64,9 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.initListener(this.juegoId);
         } else {
           Swal.fire({
-            title: "El juego aún no tiene un tablero para el juego",
-            confirmButtonText: "Cerrar",
+            title: "El juego aún no tiene un tablero para el juego, por favor espere...",
+            confirmButtonText: "OK",
             confirmButtonColor: "#9E1A00"
-          }).then(result => {
-            this.router.navigate(["list"]);
           });
         }
       });
@@ -79,6 +77,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.socket.open(juegoId);
 
     this.socket.listener(event => {
+
+      if (event.type == "cardgame.mazoasignadoajugador") {
+        window.location.reload();
+      }
+      
       if (event.type === "cardgame.cartapuestaentablero") {
         this.cartasDelTablero.push({
           cartaId: event.carta.cartaId.uuid,

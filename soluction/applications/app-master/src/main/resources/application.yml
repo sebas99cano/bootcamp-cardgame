@@ -10,8 +10,7 @@ spring:
   application:
     name: master
   data:
-    mongodb:
-      uri: ${MONGO_URI:mongodb+srv://cardgameuser:cHCoyN5zPgLTkLGs@cardgamedb.isainvn.mongodb.net/master?retryWrites=true&w=majority}
+    mongodb: ${MONGO_URI:mongodb://localhost:27017/master}
   sleuth:
     sampler:
       percentage: 1.0

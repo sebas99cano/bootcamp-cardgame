@@ -1,4 +1,4 @@
-package org.example.cardgame.usecase.usecase;
+package org.example.usecase.usecase;
 
 
 import org.example.cardgame.domain.events.*;

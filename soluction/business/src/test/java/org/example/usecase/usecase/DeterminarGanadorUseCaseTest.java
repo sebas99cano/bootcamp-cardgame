@@ -1,14 +1,13 @@
-package org.example.cardgame.usecase.usecase;
+package org.example.usecase.usecase;
 
 
-import org.example.cardgame.domain.events.CartaPuestaEnTablero;
 import org.example.cardgame.domain.events.CartaQuitadaDelMazo;
-import org.example.cardgame.domain.events.CuentaRegresivaFinalizada;
 import org.example.cardgame.domain.events.RondaTerminada;
 import org.example.cardgame.domain.values.JugadorId;
 import org.example.cardgame.domain.values.TableroId;
 import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.usecase.gateway.JuegoDomainEventRepository;
+import org.example.cardgame.usecase.usecase.DeterminarGanadorUseCase;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;

@@ -10,7 +10,7 @@ spring:
   application:
     name: game-proxy
   rabbitmq:
-    addresses: ${RABBITMQ_URI:amqps://kjtvgvhd:bHmdR5lNP-mrTr-lhe20E1Zvk1NjoBbC@chimpanzee.rmq.cloudamqp.com/kjtvgvhd}
+    addresses: ${RABBITMQ_URI:amqp://guest:guest@localhost:5672}
   sleuth:
     sampler:
       percentage: 1.0

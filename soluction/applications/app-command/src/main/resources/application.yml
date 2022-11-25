@@ -10,10 +10,10 @@ spring:
     ansi:
     enabled: ALWAYS
   rabbitmq:
-    addresses: ${RABBITMQ_URI:amqps://kjtvgvhd:bHmdR5lNP-mrTr-lhe20E1Zvk1NjoBbC@chimpanzee.rmq.cloudamqp.com/kjtvgvhd}
+    addresses: ${RABBITMQ_URI:amqp://guest:guest@localhost:5672}
   data:
     mongodb:
-        uri: ${MONGO_URI:mongodb+srv://cardgameuser:cHCoyN5zPgLTkLGs@cardgamedb.isainvn.mongodb.net/game-events?retryWrites=true&w=majority}
+      uri: ${MONGO_URI:mongodb://localhost:27017/game-events}
   sleuth:
     sampler:
       percentage: 1.0
