@@ -77,9 +77,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.socket.open(juegoId);
 
     this.socket.listener(event => {
-
       if (event.type == "cardgame.mazoasignadoajugador") {
-        window.location.reload();
+        if(event.jugadorId.uuid === this.uid){
+          this.reloadCurrentRoute();
+        }
       }
       
       if (event.type === "cardgame.cartapuestaentablero") {
@@ -124,7 +125,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       if (event.type === "cardgame.juegofinalizado") {
         setTimeout(() => {
           Swal.fire({
-            title: "Juego finalizado" + "\n" + "Ganador: " + event.alias,
+            title: "Juego finalizado" + "\n" + "Ganador: " + event.alias.value,
             confirmButtonText: "Cerrar",
             confirmButtonColor: "#9E1A00"
           }).then(result => {
@@ -182,5 +183,12 @@ export class BoardComponent implements OnInit, OnDestroy {
         juegoId: this.juegoId
       })
       .subscribe();
+  }
+
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
   }
 }

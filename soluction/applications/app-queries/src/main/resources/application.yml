@@ -12,7 +12,8 @@ spring:
   rabbitmq:
     addresses: ${RABBITMQ_URI:amqp://guest:guest@localhost:5672}
   data:
-    mongodb: ${MONGO_URI:mongodb://localhost:27017/game-views}
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/game-views}
   sleuth:
     sampler:
       percentage: 1.0

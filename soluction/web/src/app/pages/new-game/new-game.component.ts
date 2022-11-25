@@ -25,7 +25,6 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.socket.open(this.juegoId);
     console.log(this.juegoId);
     this.socket.listener((event) => {
-      console.log(event);
       if(event.type == "cardgame.jugadoragregado"){
         this.router.navigate(['list'])
       }
