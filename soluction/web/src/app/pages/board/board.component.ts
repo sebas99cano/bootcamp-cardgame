@@ -1,19 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Carta } from 'src/app/shared/model/mazo';
-import { ApiService } from 'src/app/shared/services/api.service';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { WebsocketService } from 'src/app/shared/services/websocket.service';
-import Swal from 'sweetalert2';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Carta } from "src/app/shared/model/mazo";
+import { ApiService } from "src/app/shared/services/api.service";
+import { AuthService } from "src/app/shared/services/auth.service";
+import { WebsocketService } from "src/app/shared/services/websocket.service";
+import Swal from "sweetalert2";
 
 @Component({
-  selector: 'app-board',
-  templateUrl: './board.component.html',
-  styleUrls: ['./board.component.scss']
+  selector: "app-board",
+  templateUrl: "./board.component.html",
+  styleUrls: ["./board.component.scss"]
 })
 export class BoardComponent implements OnInit, OnDestroy {
-
-
   jugadoresIds: string[] = [];
 
   cartasDelJugador: Carta[] = [];
@@ -30,142 +28,167 @@ export class BoardComponent implements OnInit, OnDestroy {
   constructor(
     public api: ApiService,
     public authService: AuthService,
-    public ws: WebsocketService,
+    public socket: WebsocketService,
     private route: ActivatedRoute,
-    private router: Router) {
-
-  }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.juegoId = params['id'];
+    this.route.params.subscribe(params => {
+      this.juegoId = params["id"];
       this.uid = this.authService.user.uid;
 
       this.api.getMiMazo(this.uid, this.juegoId).subscribe((element: any) => {
-        this.cartasDelJugador = element.cartas;
+        if (element) {
+          this.cartasDelJugador = element.cartas;
+        }
       });
 
-      this.api.getTablero(this.juegoId).subscribe((element) => {
-        
-        this.jugadoresIds = element.tablero.jugadores;
+      this.api.getTablero(this.juegoId).subscribe(element => {
+        if (element) {
+          this.jugadoresIds = element.tablero.jugadores;
 
-        Object.entries(element.tablero.cartas)
-          .forEach((a: any) => {
-            const cards = Object.keys(a[1]);           
+          Object.entries(element.tablero.cartas).forEach((a: any) => {
+            const cards = Object.keys(a[1]);
             cards.forEach((d: any) => {
               this.cartasDelTablero.push(a[1][d]);
-            })
+            });
           });
 
-        this.tiempo = element.tiempo;
-        this.jugadoresRonda = element.ronda.jugadores.length;
-        this.jugadoresTablero = element.tablero.jugadores.length;
-        this.numeroRonda = element.ronda.numero;
-        this.roundStarted = element.ronda.estaIniciada;
-        this.tableroHabilitado = element.tablero.habilitado;
-      });
-
-
-      this.ws.open(this.juegoId);
-
-      this.ws.listener((event) => {
-        if (event.type === 'cardgame.cartapuestaentablero') {
-          this.cartasDelTablero.push({
-            cartaId: event.carta.cartaId.uuid,
-            poder: event.carta.poder,
-            estaOculta: event.carta.estaHabilitada,
-            estaHabilitada: event.carta.estaHabilitada,
-            jugadorId: event.jugadorId.uuid,
+          this.tiempo = element.tiempo;
+          this.jugadoresRonda = element.ronda.jugadores.length;
+          this.jugadoresTablero = element.tablero.jugadores.length;
+          this.numeroRonda = element.ronda.numero;
+          this.roundStarted = element.ronda.estaIniciada;
+          this.tableroHabilitado = element.tablero.habilitado;
+          this.initListener(this.juegoId);
+        } else {
+          Swal.fire({
+            title: "El juego aún no tiene un tablero para el juego, por favor espere...",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#9E1A00"
           });
-        }
-
-        if (event.type === 'cardgame.cartaquitadadelmazo') {
-          this.cartasDelJugador = this.cartasDelJugador
-            .filter((item) => item.cartaId !== event.carta.cartaId.uuid);
-        }
-
-        if (event.type === 'cardgame.tiempocambiadodeltablero') {
-          this.tiempo = event.tiempo;
-        }
-
-        if (event.type === 'cardgame.rondainiciada') {
-          this.roundStarted = true;
-          this.tableroHabilitado = true;
-        }
-
-        if (event.type === 'cardgame.rondaterminada') {
-          this.cartasDelTablero = [];
-          this.roundStarted = false;
-          this.tableroHabilitado = false;
-        }
-
-        if (event.type == 'cardgame.rondacreada') {
-          this.tiempo = event.tiempo;
-          this.jugadoresRonda = event.ronda.jugadores.length;
-          this.numeroRonda = event.ronda.numero;
-          this.tableroHabilitado = false;
-          this.roundStarted = false;
-        }
-
-        if (event.type === 'cardgame.juegofinalizado') {
-          setTimeout(() => {
-            Swal.fire({
-              title: 'Juego finalizado' + '\n' + 'Ganador: ' + event.alias,
-              confirmButtonText: 'Cerrar',
-              confirmButtonColor: '#9E1A00',
-            }).then(result => {
-              this.router.navigate(['home']);
-            });
-          }, 1700);
-        }
-
-        if (event.type === 'cardgame.cartasasignadasajugador') {
-          if (event.ganadorId.uuid === this.uid) {
-            event.cartasApuesta.forEach((carta: any) => {
-              this.cartasDelJugador.push({
-                cartaId: carta.cartaId.uuid,
-                poder: carta.poder,
-                estaOculta: carta.estaOculta,
-                estaHabilitada: carta.estaHabilitada,
-                jugadorId: event.ganadorId.uuid,
-              });
-            });
-            Swal.fire({
-              icon: 'success',
-              title: 'Ganaste la ronda!',
-              showConfirmButton: false,
-              timer: 1500
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Perdiste la ronda :(',
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
         }
       });
     });
   }
 
+  initListener(juegoId: string) {
+    this.socket.open(juegoId);
+
+    this.socket.listener(event => {
+      if (event.type == "cardgame.mazoasignadoajugador") {
+        if(event.jugadorId.uuid === this.uid){
+          this.reloadCurrentRoute();
+        }
+      }
+      
+      if (event.type === "cardgame.cartapuestaentablero") {
+        this.cartasDelTablero.push({
+          cartaId: event.carta.cartaId.uuid,
+          poder: event.carta.poder,
+          estaOculta: event.carta.estaHabilitada,
+          estaHabilitada: event.carta.estaHabilitada,
+          jugadorId: event.jugadorId.uuid
+        });
+      }
+
+      if (event.type === "cardgame.cartaquitadadelmazo") {
+        this.cartasDelJugador = this.cartasDelJugador.filter(
+          item => item.cartaId !== event.carta.cartaId.uuid
+        );
+      }
+
+      if (event.type === "cardgame.tiempocambiadodeltablero") {
+        this.tiempo = event.tiempoLimite.value;
+      }
+
+      if (event.type === "cardgame.rondainiciada") {
+        this.roundStarted = true;
+        this.tableroHabilitado = true;
+      }
+
+      if (event.type === "cardgame.rondaterminada") {
+        this.cartasDelTablero = [];
+        this.roundStarted = false;
+        this.tableroHabilitado = false;
+      }
+
+      if (event.type == "cardgame.rondacreada") {
+        this.tiempo = event.tiempoLimite.value;
+        this.jugadoresRonda = event.ronda.jugadores.length;
+        this.numeroRonda = event.ronda.numero;
+        this.tableroHabilitado = false;
+        this.roundStarted = false;
+      }
+
+      if (event.type === "cardgame.juegofinalizado") {
+        setTimeout(() => {
+          Swal.fire({
+            title: "Juego finalizado" + "\n" + "Ganador: " + event.alias.value,
+            confirmButtonText: "Cerrar",
+            confirmButtonColor: "#9E1A00"
+          }).then(result => {
+            this.router.navigate(["home"]);
+          });
+        }, 1700);
+      }
+
+      if (event.type === "cardgame.cartasasignadasajugador") {
+        if (event.ganadorId.uuid === this.uid) {
+          event.cartasApuesta.forEach((carta: any) => {
+            this.cartasDelJugador.push({
+              cartaId: carta.cartaId.uuid,
+              poder: carta.poder,
+              estaOculta: carta.estaOculta,
+              estaHabilitada: carta.estaHabilitada,
+              jugadorId: event.ganadorId.uuid
+            });
+          });
+          Swal.fire({
+            icon: "success",
+            title: "Ganaste la ronda!",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Perdiste la ronda :(",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      }
+    });
+  }
 
   ngOnDestroy(): void {
-    this.ws.close();
+    this.socket.close();
   }
 
   poner(cartaId: string) {
-    this.api.ponerCarta({
-      cartaId: cartaId,
-      juegoId: this.juegoId,
-      jugadorId: this.uid
-    }).subscribe();
+    this.api
+      .ponerCarta({
+        cartaId: cartaId,
+        juegoId: this.juegoId,
+        jugadorId: this.uid
+      })
+      .subscribe();
   }
 
   iniciarRonda() {
-    this.api.iniciarRonda({
-      juegoId: this.juegoId,
-    }).subscribe();
+    this.api
+      .iniciarRonda({
+        juegoId: this.juegoId
+      })
+      .subscribe();
   }
 
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+  }
 }

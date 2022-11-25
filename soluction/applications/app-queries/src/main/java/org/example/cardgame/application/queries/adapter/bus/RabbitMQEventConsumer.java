@@ -55,7 +55,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                             .parentId(notification.getParentId())
                             .spanId(notification.getSpanId())
                             .traceId(notification.getTraceId())
-                    .build();
+                            .build();
                     try {
                         var event = serializer.deserialize(
                                 notification.getBody(), Class.forName(notification.getType())
@@ -70,7 +70,7 @@ public class RabbitMQEventConsumer implements CommandLineRunner {
                                     return Mono.just(message);
                                 }));
                     } catch (ClassNotFoundException e) {
-                       throw new IllegalArgumentException();
+                        throw new IllegalArgumentException();
                     }
 
                 }, 1).subscribe(AcknowledgableDelivery::ack);

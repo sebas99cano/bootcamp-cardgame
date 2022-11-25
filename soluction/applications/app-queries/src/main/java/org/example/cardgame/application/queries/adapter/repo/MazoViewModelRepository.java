@@ -12,6 +12,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface MazoViewModelRepository extends ReactiveCrudRepository<MazoViewModel, String> {
 
-    Mono<MazoViewModel> findByUid(String uid);
     Mono<MazoViewModel> findByJuegoIdAndUid(String juegoId, String uid);
 }

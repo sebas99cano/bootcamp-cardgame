@@ -18,13 +18,14 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService, private auth: AuthService, private socket:WebsocketService, private router:Router) {
      this.juegoId = uuidv1();
-     socket.open(this.juegoId);
    }
  
 
   ngOnInit(): void {
+    this.socket.open(this.juegoId);
+    console.log(this.juegoId);
     this.socket.listener((event) => {
-      if(event.type == "cardgame.juegocreado"){
+      if(event.type == "cardgame.jugadoragregado"){
         this.router.navigate(['list'])
       }
     });

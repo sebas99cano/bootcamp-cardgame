@@ -21,9 +21,8 @@ public class HandleCartaQuitadaDelMazo  implements MaterializeService {
     public Mono<Void> doProcessing(DomainEvent input) {
         var event = (CartaQuitadaDelMazo) input;
 
-        return repository.findByUid(event.getJugadorId().value()).flatMap(mazo -> {
+        return repository.findByJuegoIdAndUid(event.aggregateRootId(), event.getJugadorId().value()).flatMap(mazo -> {
             var carta = event.getCarta().value();
-            //TODO:
             mazo.getCartas().removeIf(c -> carta.cartaId().value().equals(c.getCartaId()));
             return repository.save(mazo);
         }).then();

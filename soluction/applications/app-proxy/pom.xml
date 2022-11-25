@@ -12,7 +12,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>app-proxy</artifactId>
-  
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -28,6 +28,7 @@
             <artifactId>reactor-rabbitmq</artifactId>
             <version>1.5.6-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <artifactId>domain</artifactId>
             <groupId>org.example.cardgame</groupId>
