@@ -10,7 +10,7 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /queries
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
 
@@ -19,17 +19,10 @@ spec:
     - host: {{ .Values.ingress.host }}
     - http:
         paths:
-          - path: /commands
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ .Release.Name }}-command
+                name: {{ .Release.Name }}-gateway
                 port: 
-                  number: 8080
-          - path: /queries
-            pathType: Prefix
-            backend:
-              service:
-                name:  {{ .Release.Name }}-queries
-                port: 
-                  number: 8081
+                  number: 5000

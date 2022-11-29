@@ -25,7 +25,7 @@ spec:
           readinessProbe:
             httpGet:
               port: 8080
-              path: /commands/
+              path: /actuator
           env:
             - name: "MONGO_URI"
               valueFrom:

@@ -26,6 +26,18 @@ queries:
   repository: docker.io/xtsofka/cardgame-queries
   pullPolicy: Always
 
+proxy:
+  repository: docker.io/xtsofka/cardgame-proxy
+  pullPolicy: Always
+
+
+gateway:
+  repository: docker.io/xtsofka/cardgame-gateway
+  pullPolicy: Always
+
+master:
+  repository: docker.io/xtsofka/cardgame-master
+  pullPolicy: Always
 
 ingress:
   host: localhost
