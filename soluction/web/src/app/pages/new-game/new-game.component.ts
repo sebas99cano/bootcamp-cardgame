@@ -45,18 +45,18 @@ export class NewGameComponent implements OnInit, OnDestroy {
       alias:  this.auth.user.displayName,
       montoRequerido: monto
     }).subscribe({
-        error: () =>
-        Swal.fire({
-          backdrop: 'url(https://wallpaper.dog/large/20461297.jpg)',
-          background: '#7C7C7C',
-          grow: 'fullscreen',
-          icon: 'warning',
-          title: 'Existe un error dentro del juego',
-          color: 'white',
+      error: error => {
+        return Swal.fire({
+          backdrop: "url(https://wallpaper.dog/large/20461297.jpg)",
+          background: "#7C7C7C",
+          grow: "fullscreen",
+          icon: "warning",
+          title: error.error.message,
+          color: "white",
           showConfirmButton: false,
-          timer: 1500
-        })
+          timer: 2500
+        });
       }
-    );
+    });
   }
 }

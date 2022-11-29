@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {Observable} from 'rxjs';
@@ -12,34 +12,55 @@ import {PonerCartaEnTableroCommand} from '../commands/ponerCartaEnTableroCommand
 import {JuegoModel, Jugador} from '../model/juego';
 import {TableroModel} from '../model/tablero';
 import {User} from '../model/user';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  httpHeaders: HttpHeaders;
 
+  constructor(private http: HttpClient, public afs: AngularFirestore, private auth: AuthService
+  ) { 
 
-  constructor(private http: HttpClient, public afs: AngularFirestore,
-  ) { }
+    this.httpHeaders = new HttpHeaders({
+      "Authorization": "Bearer " + auth.getToken()
+    })
+  }
 
   crearJuego(command: CrearJuegoCommand) {
-    return this.http.post(environment.apiBaseCommand + '/juego/crear', command);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.post(environment.apiBaseCommand + '/juego/crear', command, httpOptions);
   }
 
   iniciarJuego(command: IniciarJuegoCommand){
-    return this.http.post(environment.apiBaseCommand + '/juego/iniciar', command);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.post(environment.apiBaseCommand + '/juego/iniciar', command, httpOptions);
   }
 
   unirse(command: UnirseAlJuegoCommand){
-    return this.http.post(environment.apiBaseCommand + '/juego/unirse', command);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.post(environment.apiBaseCommand + '/juego/unirse', command, httpOptions);
   }
 
   iniciarRonda(command: IniciarRondaCommand){
-    return this.http.post(environment.apiBaseCommand + '/juego/ronda/iniciar', command);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.post(environment.apiBaseCommand + '/juego/ronda/iniciar', command, httpOptions);
   }
 
   ponerCarta(command: PonerCartaEnTableroCommand){
-    return this.http.post(environment.apiBaseCommand + '/juego/poner', command);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.post(environment.apiBaseCommand + '/juego/poner', command, httpOptions);
   }
 
   getJugadores(): Observable<Jugador[]> {
@@ -52,18 +73,30 @@ export class ApiService {
   }
 
   getMisJuegos(uid: string): Observable<JuegoModel[]> {
-    return this.http.get<JuegoModel[]>(environment.apiBaseQuery + '/juego/listar/' + uid);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.get<JuegoModel[]>(environment.apiBaseQuery + '/juego/listar/' + uid, httpOptions);
    }
 
   getJuegos(): Observable<JuegoModel[]> {
-    return this.http.get<JuegoModel[]>(environment.apiBaseQuery + '/juego/todos');
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.get<JuegoModel[]>(environment.apiBaseQuery + '/juego/todos', httpOptions);
   }
 
   getMiMazo(uid: string, juegoId: string) {
-    return this.http.get(environment.apiBaseQuery + '/juego/mazo/' + juegoId + '/' + uid);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.get(environment.apiBaseQuery + '/juego/mazo/' + juegoId + '/' + uid, httpOptions);
   }
 
   getTablero(juegoId: string): Observable<TableroModel> {
-    return this.http.get<TableroModel>(environment.apiBaseQuery + '/juego/tablero/' + juegoId);
+    const httpOptions = {
+      headers: this.httpHeaders
+    };
+    return this.http.get<TableroModel>(environment.apiBaseQuery + '/juego/tablero/' + juegoId, httpOptions);
   }
 }

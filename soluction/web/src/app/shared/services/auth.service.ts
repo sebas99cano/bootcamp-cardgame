@@ -40,6 +40,13 @@ export class AuthService {
     throw new Error("No found uid");
   }
 
+  getToken(): string {
+    if (this.isLoggedIn) {
+      return JSON.parse(localStorage.getItem('user')!).stsTokenManager.accessToken;
+    }
+    throw new Error("No found uid");
+  }
+
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null && user.emailVerified !== false ? true : false;
