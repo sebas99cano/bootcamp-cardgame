@@ -17,7 +17,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}-master
     spec:
       containers:
-        - name: queries
+        - name: master
           image: "{{ .Values.master.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.master.pullPolicy }}
           ports:
