@@ -5,6 +5,7 @@
 /soluction/applications/app-command/target/
 /soluction/applications/app-proxy/target/
 /soluction/applications/app-master/target/
+/soluction/applications/app-gateway/target/
 
 /.idea/
 /web/.angular/
@@ -16,6 +17,8 @@
 /soluction/applications/app-command/app-command.iml
 /soluction/applications/app-queries/app-queries.iml
 /soluction/applications/app-master/app-master.iml
+/soluction/applications/app-gateway/app-gateway.iml
+
 /soluction/applications/applications.iml
 /soluction/domain/domain.iml
 /soluction/business/business.iml

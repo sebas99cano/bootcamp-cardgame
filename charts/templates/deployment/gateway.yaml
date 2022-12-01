@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-gateway
+  labels:
+    {{- include "cardgame-core.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cardgame-core.name" . }}-gateway
+      app.kubernetes.io/instance: {{ .Release.Name }}-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "cardgame-core.name" . }}-gateway
+        app.kubernetes.io/instance: {{ .Release.Name }}-gateway
+    spec:
+      containers:
+        - name: gateway
+          image: "{{ .Values.gateway.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.gateway.pullPolicy }}
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              port: 5000
+              path: /actuator
+

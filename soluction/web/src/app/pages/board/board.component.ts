@@ -61,7 +61,6 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.numeroRonda = element.ronda.numero;
           this.roundStarted = element.ronda.estaIniciada;
           this.tableroHabilitado = element.tablero.habilitado;
-          this.initListener(this.juegoId);
         } else {
           Swal.fire({
             title: "El juego aún no tiene un tablero para el juego, por favor espere...",
@@ -69,6 +68,7 @@ export class BoardComponent implements OnInit, OnDestroy {
             confirmButtonColor: "#9E1A00"
           });
         }
+        this.initListener(this.juegoId);
       });
     });
   }
@@ -174,7 +174,20 @@ export class BoardComponent implements OnInit, OnDestroy {
         juegoId: this.juegoId,
         jugadorId: this.uid
       })
-      .subscribe();
+      .subscribe({
+        error: error => {
+          return Swal.fire({
+            backdrop: "url(https://wallpaper.dog/large/20461297.jpg)",
+            background: "#7C7C7C",
+            grow: "fullscreen",
+            icon: "warning",
+            title: error.error.message,
+            color: "white",
+            showConfirmButton: false,
+            timer: 2500
+          });
+        }
+      });;
   }
 
   iniciarRonda() {
@@ -182,7 +195,20 @@ export class BoardComponent implements OnInit, OnDestroy {
       .iniciarRonda({
         juegoId: this.juegoId
       })
-      .subscribe();
+      .subscribe({
+        error: error => {
+          return Swal.fire({
+            backdrop: "url(https://wallpaper.dog/large/20461297.jpg)",
+            background: "#7C7C7C",
+            grow: "fullscreen",
+            icon: "warning",
+            title: error.error.message,
+            color: "white",
+            showConfirmButton: false,
+            timer: 2500
+          });
+        }
+      });;
   }
 
   reloadCurrentRoute() {

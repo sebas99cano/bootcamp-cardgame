@@ -32,6 +32,9 @@ public class JuegoEventChange extends EventChange {
         });
 
         apply((TableroCreado event) -> {
+            if (juego.jugadores.size() <= 1) {
+                throw new IllegalArgumentException("Para crear tablero debe tener minimamente 2 jugadores");
+            }
             juego.tablero = new Tablero(event.getTableroId(), event.getJugadorIds());
         });
 

@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { ApiService } from "src/app/shared/services/api.service";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { WebsocketService } from "src/app/shared/services/websocket.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-list-game",
@@ -28,7 +29,6 @@ export class ListGameComponent {
     });
   }
 
-
   joinGame(id: string) {
     this.socket.open(id);
     this.socket.listener(event => {
@@ -37,11 +37,25 @@ export class ListGameComponent {
         this.socket.close();
       }
     });
-    this.api.unirse({
+    this.api
+      .unirse({
         juegoId: id,
         jugadorId: this.uid,
         alias: this.alias
-      }).subscribe();
+      }).subscribe({
+        error: error => {
+          return Swal.fire({
+            backdrop: "url(https://wallpaper.dog/large/20461297.jpg)",
+            background: "#7C7C7C",
+            grow: "fullscreen",
+            icon: "warning",
+            title: error.error.message,
+            color: "white",
+            showConfirmButton: false,
+            timer: 2500
+          });
+        }
+      });;
   }
 
   showName(data: any) {
@@ -57,6 +71,19 @@ export class ListGameComponent {
         this.socket.close();
       }
     });
-    this.api.iniciarJuego({ juegoId: id }).subscribe();
+    this.api.iniciarJuego({ juegoId: id }).subscribe({
+      error: error => {
+        return Swal.fire({
+          backdrop: "url(https://wallpaper.dog/large/20461297.jpg)",
+          background: "#7C7C7C",
+          grow: "fullscreen",
+          icon: "warning",
+          title: error.error.message,
+          color: "white",
+          showConfirmButton: false,
+          timer: 2500
+        });
+      }
+    });
   }
 }

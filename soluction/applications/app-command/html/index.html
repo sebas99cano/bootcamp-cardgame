@@ -527,32 +527,20 @@ Tener en cuenta los elementos integrados que facilita el funcionamiento de esta 
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">El monto requerido</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>when</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">La fecha en la que se emite el comando</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uuid</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">El identificador del comando</p></td>
-</tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /juego/crear HTTP/1.1
 Content-Type: application/json; charset=UTF-8
-Host: localhost:55970
-Content-Length: 178
+Host: localhost:59185
+Content-Length: 101
 
 {
-  "juegoId" : "1",
   "jugadorPrincipalId" : "1",
   "alias" : "Andres",
-  "montoRequerido" : 200,
-  "when" : "1668883755942",
-  "uuid" : "daa7f0d4-5dc8-4477-b841-4e036a9f3177"
+  "montoRequerido" : 30000,
+  "juegoId" : "1"
 }</code></pre>
 </div>
 </div>
@@ -565,13 +553,13 @@ Content-Length: 178
     "uuid" : "1"
   },
   "montoRequerido" : {
-    "value" : 200
+    "value" : 30000
   },
   "when" : {
-    "seconds" : 1668883756,
-    "nanos" : 863058000
+    "seconds" : 1669336322,
+    "nanos" : 133725000
   },
-  "uuid" : "1664d978-80f6-4fc7-b993-135c74f95787",
+  "uuid" : "6bb78c5b-36e0-4eba-b592-3960b2bf9386",
   "type" : "cardgame.juegocreado",
   "aggregateRootId" : "1",
   "aggregate" : "juego",
@@ -584,10 +572,10 @@ Content-Length: 178
     "value" : "Andres"
   },
   "when" : {
-    "seconds" : 1668883756,
-    "nanos" : 864634000
+    "seconds" : 1669336322,
+    "nanos" : 137098000
   },
-  "uuid" : "14249556-4368-4219-a4ae-4fd9e4db2dae",
+  "uuid" : "a39a84af-67a5-44d9-945a-80371fccad56",
   "type" : "cardgame.jugadoragregado",
   "aggregateRootId" : "1",
   "aggregate" : "juego",

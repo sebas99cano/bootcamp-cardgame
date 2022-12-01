@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-master
+  labels:
+    {{- include "cardgame-core.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cardgame-core.name" . }}-master
+      app.kubernetes.io/instance: {{ .Release.Name }}-master
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "cardgame-core.name" . }}-master
+        app.kubernetes.io/instance: {{ .Release.Name }}-master
+    spec:
+      containers:
+        - name: master
+          image: "{{ .Values.master.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.master.pullPolicy }}
+          ports:
+            - containerPort: 8085
+          readinessProbe:
+            httpGet:
+              port: 8085
+              path: /actuator
+          env:
+            - name: "MONGO_URI"
+              valueFrom:
+                secretKeyRef:
+                  key:  mongo_uri
+                  name: {{ .Release.Name }}-uri
+
