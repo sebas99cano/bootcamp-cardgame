@@ -4,7 +4,15 @@ kind: ClusterConfig
 metadata:
   name: raul-cardgame
   region: us-east-1
-
+  
+iam:
+  withOIDC: true   
+  serviceAccounts:
+    - metadata:
+        name: aws-load-balancer
+        namespace: kube-system
+      wellKnownPolicies:
+        awsLoadBalancerController: true
 vpc:
   subnets:
     private:
