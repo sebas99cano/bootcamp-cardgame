@@ -1,5 +1,6 @@
 package org.example.cardgame.application.command.adapter.service;
 
+import org.example.cardgame.application.command.ConfigProperties;
 import org.example.cardgame.usecase.gateway.ListaDeCartaService;
 import org.example.cardgame.usecase.gateway.model.CartaMaestra;
 import org.springframework.http.MediaType;
@@ -11,8 +12,8 @@ import reactor.core.publisher.Flux;
 public class DataConsultarCartaMaestraService implements ListaDeCartaService {
     private final WebClient client;
 
-    public DataConsultarCartaMaestraService(WebClient.Builder builder) {
-        this.client = builder.baseUrl("http://localhost:8085").build();
+    public DataConsultarCartaMaestraService(WebClient.Builder builder, ConfigProperties configProperties) {
+        this.client = builder.baseUrl(configProperties.getUriMaster()).build();
     }
 
 

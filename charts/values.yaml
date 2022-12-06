@@ -15,28 +15,29 @@ rabbitmq:
     password: RabbitMQPassword
   memoryHighWatermark.enabled: true
 
-mongo_uri: "mongodb://userCore:MongoDBPassword@core-cardgame-mongodb:27017/queries"
-rabbitmq_uri: "amqp://userCore:RabbitMQPassword@core-cardgame-rabbitmq:5672"
+mongo_uri: "mongodb://userCore:MongoDBPassword@cardgame-core-mongodb:27017/cardgame"
+rabbitmq_uri: "amqp://userCore:RabbitMQPassword@cardgame-core-rabbitmq:5672"
+master_uri: "http://cardgame-core-master:8085"
 
 command:
-  repository: docker.io/xtsofka/cardgame-command
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-command
   pullPolicy: Always
 
 queries:
-  repository: docker.io/xtsofka/cardgame-queries
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-queries
   pullPolicy: Always
 
 proxy:
-  repository: docker.io/xtsofka/cardgame-proxy
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-proxy
   pullPolicy: Always
 
 
 gateway:
-  repository: docker.io/xtsofka/cardgame-gateway
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-gateway
   pullPolicy: Always
 
 master:
-  repository: docker.io/xtsofka/cardgame-master
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-master
   pullPolicy: Always
 
 ingress:

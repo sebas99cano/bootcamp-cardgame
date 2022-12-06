@@ -22,8 +22,4 @@ spec:
           imagePullPolicy: {{ .Values.gateway.pullPolicy }}
           ports:
             - containerPort: 5000
-          readinessProbe:
-            httpGet:
-              port: 5000
-              path: /actuator
 

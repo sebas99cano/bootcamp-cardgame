@@ -22,10 +22,6 @@ spec:
           imagePullPolicy: {{ .Values.command.pullPolicy }}
           ports:
             - containerPort: 8080
-          readinessProbe:
-            httpGet:
-              port: 8080
-              path: /actuator
           env:
             - name: "MONGO_URI"
               valueFrom:
@@ -37,3 +33,10 @@ spec:
                 secretKeyRef:
                   key:  rabbitmq_uri
                   name: {{ .Release.Name }}-uri
+            - name: "URI_MASTER"
+              valueFrom:
+                secretKeyRef:
+                  key:  master_uri
+                  name: {{ .Release.Name }}-uri
+
+

@@ -10,6 +10,15 @@ public class ConfigProperties {
     private String exchange;
     private String queue;
     private String routingKey;
+    private String uriBus;
+
+    public void setUriBus(String uriBus) {
+        this.uriBus = uriBus;
+    }
+
+    public String getUriBus() {
+        return uriBus;
+    }
 
     public String getExchange() {
         return exchange;

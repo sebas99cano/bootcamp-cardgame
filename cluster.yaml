@@ -4,7 +4,7 @@ kind: ClusterConfig
 metadata:
   name: raul-cardgame
   region: us-east-1
-  
+
 iam:
   withOIDC: true   
   serviceAccounts:
@@ -23,12 +23,12 @@ vpc:
 nodeGroups:
   - name: ng-1-workers
     labels: { role: workers }
-    instanceType: t3.small
-    desiredCapacity: 1
+    instanceType: t3.large
+    desiredCapacity: 3
     privateNetworking: true
   - name: ng-2-builders
     labels: { role: builders }
-    instanceType: t3.small
+    instanceType: t3.large
     desiredCapacity: 1
     privateNetworking: true
     iam:

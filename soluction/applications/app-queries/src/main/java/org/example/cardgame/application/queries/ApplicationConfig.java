@@ -43,9 +43,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public Mono<Connection> connectionMono(@Value("spring.application.name") String name) {
-        ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.useNio();
+    public Mono<Connection> connectionMono(@Value("spring.application.name") String name, ConnectionFactory connectionFactory) {
         return Mono.fromCallable(() -> connectionFactory.newConnection(name)).cache();
     }
 
