@@ -1,19 +1,20 @@
 mongodb:
-  mongodbUsername: userCore
-  mongodbPassword: MongoDBPassword
-  mongodbDatabase: queries
-  architecture: replicaset
+  auth:
+    rootPassword: MongoDBPassword
+    username: userCore
+    password: MongoDBPassword
+    database: cardgame
+  architecture: standalone
   replicaCount: 1
   pdb.create: true
 
 rabbitmq:
-  pdb.create: true
-  replicaCount: 1
   auth:
     erlangCookie: cardgameCore
     username: userCore
     password: RabbitMQPassword
-  memoryHighWatermark.enabled: true
+  replicaCount: 1
+  pdb.create: true
 
 mongo_uri: "mongodb://userCore:MongoDBPassword@cardgame-core-mongodb:27017/cardgame"
 rabbitmq_uri: "amqp://userCore:RabbitMQPassword@cardgame-core-rabbitmq:5672"
