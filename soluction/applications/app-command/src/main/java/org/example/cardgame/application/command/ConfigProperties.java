@@ -11,6 +11,7 @@ public class ConfigProperties {
     private String queue;
     private String storeName;
     private String routingKey;
+    private String uriMaster;
 
     public String getExchange() {
         return exchange;
@@ -42,5 +43,13 @@ public class ConfigProperties {
 
     public void setRoutingKey(String routingKey) {
         this.routingKey = routingKey;
+    }
+
+    public void setUriMaster(String uriMaster) {
+        this.uriMaster = uriMaster;
+    }
+
+    public String getUriMaster() {
+        return uriMaster;
     }
 }

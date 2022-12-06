@@ -24,6 +24,7 @@ microservice:
   queue: ${QUEUE:game.commandhandles}
   storeName: ${STORE_NAME:game}
   routingKey: ${ROUTING_KEY:cardgame.#}
+  uriMaster: ${URI_MASTER:http://localhost:8085}
 
 
 

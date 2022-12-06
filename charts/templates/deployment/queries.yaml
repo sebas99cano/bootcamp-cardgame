@@ -22,10 +22,6 @@ spec:
           imagePullPolicy: {{ .Values.queries.pullPolicy }}
           ports:
             - containerPort: 8081
-          readinessProbe:
-            httpGet:
-              port: 8081
-              path: /actuator
           env:
             - name: "MONGO_URI"
               valueFrom:
