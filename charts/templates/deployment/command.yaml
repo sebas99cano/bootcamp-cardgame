@@ -34,9 +34,9 @@ spec:
                   key:  rabbitmq_uri
                   name: {{ .Release.Name }}-uri
             - name: "URI_MASTER"
-                valueFrom:
-                  secretKeyRef:
-                    key:  master_uri
-                    name: {{ .Release.Name }}-uri
+              valueFrom:
+                secretKeyRef:
+                  key:  master_uri
+                  name: {{ .Release.Name }}-uri
 
 

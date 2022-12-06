@@ -12,6 +12,25 @@ public class ConfigProperties {
     private String storeName;
     private String routingKey;
     private String uriMaster;
+    private String uriBus;
+    private String uriDb;
+
+
+    public void setUriDb(String uriDb) {
+        this.uriDb = uriDb;
+    }
+
+    public String getUriDb() {
+        return uriDb;
+    }
+
+    public void setUriBus(String uriBus) {
+        this.uriBus = uriBus;
+    }
+
+    public String getUriBus() {
+        return uriBus;
+    }
 
     public String getExchange() {
         return exchange;

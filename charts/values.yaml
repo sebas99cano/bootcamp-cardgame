@@ -15,29 +15,29 @@ rabbitmq:
     password: RabbitMQPassword
   memoryHighWatermark.enabled: true
 
-mongo_uri: "mongodb://userCore:MongoDBPassword@core-cardgame-mongodb:27017/queries"
-rabbitmq_uri: "amqp://userCore:RabbitMQPassword@core-cardgame-rabbitmq:5672"
-master_uri: "http://cardgame-master:8085"
+mongo_uri: "mongodb://userCore:MongoDBPassword@cardgame-core-mongodb:27017/cardgame"
+rabbitmq_uri: "amqp://userCore:RabbitMQPassword@cardgame-core-rabbitmq:5672"
+master_uri: "http://cardgame-core-master:8085"
 
 command:
-  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-command:latest
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-command
   pullPolicy: Always
 
 queries:
-  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-queries:latest
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-queries
   pullPolicy: Always
 
 proxy:
-  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-proxy:latest
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-proxy
   pullPolicy: Always
 
 
 gateway:
-  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-gateway:latest
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-gateway
   pullPolicy: Always
 
 master:
-  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-master:latest
+  repository: 316078593388.dkr.ecr.us-east-1.amazonaws.com/raul-master
   pullPolicy: Always
 
 ingress:

@@ -9,11 +9,11 @@ spring:
       enabled: ALWAYS
   application:
     name: master
-  data:
-    mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/master}
   sleuth:
     sampler:
       percentage: 1.0
   zipkin: # All zipkin features disabled for integration tests
     enabled: false
+
+microservice:
+  uriDb: ${MONGO_URI:mongodb://localhost:27017/game-events}
