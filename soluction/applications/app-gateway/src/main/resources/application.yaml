@@ -9,11 +9,13 @@ spring:
       enabled: true
       routes:
         - id: master
-          uri: http://localhost:8085/list
+          uri: ${MASTER_URI:http://localhost:8085/}
           predicates:
-              - Path=/list
+              - Path=/master/**
+          filters:
+            - RewritePath=/master/(?<segment>.*), /$\{segment}
         - id: command
-          uri: http://localhost:8080/
+          uri: ${COMMAND_URI:http://localhost:8080/}
           predicates:
               - Path=/command/**
           filters:
@@ -21,13 +23,13 @@ spring:
             - JWTFilter=RSA256,HS256,RS256
             - RemoveResponseHeader=X-Powered-By
         - id: queries
-          uri: http://localhost:8081/
+          uri: ${QUERIES_URI:http://localhost:8081/}
           predicates:
             - Path=/queries/**
           filters:
             - RewritePath=/queries/(?<segment>.*), /$\{segment}
         - id: proxy
-          uri: ws://localhost:8082/
+          uri: ${PROXY_URI:ws://localhost:8082/}
           predicates:
             - Path=/proxy/**
           filters:

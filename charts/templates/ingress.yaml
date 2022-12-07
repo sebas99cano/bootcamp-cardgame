@@ -7,22 +7,23 @@ metadata:
   annotations:
     ingress.kubernetes.io/enable-cors: "true"
     ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+    ingress.kubernetes.io/cors-allow-origin: "*"
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /actuator
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/ssl-redirect: '443'
-
+    lb.ingress.kubernetes.io/healthcheck-path: /actuator
+    alb.ingress.kubernetes.io/subnets: subnet-0064cbb5bf2086a41,subnet-0ce1127dbee4ada19,subnet-07f280948e955088d
+    #alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:803261861643:certificate/fa3023b1-5588-4b85-bb86-ca693486a09f
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    #alb.ingress.kubernetes.io/ssl-redirect: '443'
 spec:
   rules:
-    - host: {{ .Values.ingress.host }}
     - http:
         paths:
-          - path: /
-            pathType: Prefix
-            backend:
+          - backend:
               service:
                 name: {{ .Release.Name }}-gateway
-                port: 
+                port:
                   number: 5000
+            path: /
+            pathType: Prefix

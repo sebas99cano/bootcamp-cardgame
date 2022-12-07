@@ -4,15 +4,11 @@ kind: ClusterConfig
 metadata:
   name: raul-cardgame
   region: us-east-1
+  version: "1.22"
 
 iam:
-  withOIDC: true   
-  serviceAccounts:
-    - metadata:
-        name: aws-load-balancer
-        namespace: kube-system
-      wellKnownPolicies:
-        awsLoadBalancerController: true
+  withOIDC: true
+
 vpc:
   subnets:
     private:
@@ -24,7 +20,7 @@ nodeGroups:
   - name: ng-1-workers
     labels: { role: workers }
     instanceType: t3.large
-    desiredCapacity: 3
+    desiredCapacity: 2
     privateNetworking: true
   - name: ng-2-builders
     labels: { role: builders }
@@ -34,3 +30,5 @@ nodeGroups:
     iam:
       withAddonPolicies:
         imageBuilder: true
+        ebs: true
+        awsLoadBalancerController: true

@@ -22,4 +22,12 @@ spec:
           imagePullPolicy: {{ .Values.gateway.pullPolicy }}
           ports:
             - containerPort: 5000
-
+          env:
+            - name: MASTER_URI
+              value: "http://{{ .Release.Name }}-master:8085"
+            - name: COMMAND_URI
+              value: "http://{{ .Release.Name }}-command:8080"
+            - name: QUERIES_URI
+              value: "http://{{ .Release.Name }}-queries:8081"
+            - name: PROXY_URI
+              value: "ws://{{ .Release.Name }}-proxy:8082"
