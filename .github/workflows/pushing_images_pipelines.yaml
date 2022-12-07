@@ -1,0 +1,116 @@
+#set up de java
+#checkout del proyecto
+#cd soluction
+#mvn install -DskipTests
+#cd applications/app-command/
+#mvn clean package -DskipTests
+#cd applications/app-gateway/
+#mvn clean package -DskipTests
+#cd applications/app-queries/
+#mvn clean package -DskipTests
+#cd applications/app-proxy/
+#mvn clean package -DskipTests
+#cd applications/app-master/
+#mvn clean package -DskipTests
+
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: set up java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '11'
+          cache: 'maven'
+
+      - name: Install modules on main pom.xml
+        working-directory: ./soluction
+        run: mvn clean install -DskipTests
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: create the jar for app-command
+        working-directory: ./soluction/applications/app-command
+        run: mvn clean package -DskipTests
+
+      - name: Build, tag, and push juancano command to Amazon ECR
+        working-directory: ./soluction/applications/app-command
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: juancano-command
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: create jar for app-queries
+        working-directory: ./soluction/applications/app-queries
+        run: mvn clean package -DskipTests
+
+      - name: Build, tag, and push juancano queries to Amazon ECR
+        working-directory: ./soluction/applications/app-queries
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: juancano-queries
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: create jar for app-proxy
+        working-directory: ./soluction/applications/app-proxy
+        run: mvn clean package -DskipTests
+
+      - name: Build, tag, and push juancano proxy to Amazon ECR
+        working-directory: ./soluction/applications/app-proxy
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: juancano-proxy
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: create jar for app-master
+        working-directory: ./soluction/applications/app-master
+        run: mvn clean package -DskipTests
+
+      - name: Build, tag, and push juancano master to Amazon ECR
+        working-directory: ./soluction/applications/app-master
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: juancano-master
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: create jar for app-gateway
+        working-directory: ./soluction/applications/app-gateway
+        run: mvn clean package -DskipTests
+
+      - name: Build, tag, and push juancano gateway to Amazon ECR
+        working-directory: ./soluction/applications/app-gateway
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: juancano-gateway
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
