@@ -1,8 +1,5 @@
-#eksctl create cluster --name raul-cardgame \
-#  --region region-code \
-#  --version 1.24 \
-#  --vpc-private-subnets subnet-0064cbb5bf2086a41,subnet-0ce1127dbee4ada19,subnet-07f280948e955088d \
-#  --without-nodegroup
+eksctl create cluster --name raul-cardgame -f cluster.yaml
+## create rol AWSLoadBalancerControllerIAMPolicy y AmazonEKS_EBS_CSI_DriverRole
 
 eksctl create iamserviceaccount \
   --cluster=raul-cardgame \
