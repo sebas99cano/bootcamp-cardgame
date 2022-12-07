@@ -1,9 +1,7 @@
 package org.example.cardgame.application.command.adapter.bus;
 
-import brave.Request;
 import brave.Span;
 import brave.Tracer;
-import brave.Tracing;
 import org.example.cardgame.application.command.ConfigProperties;
 import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.ErrorEvent;

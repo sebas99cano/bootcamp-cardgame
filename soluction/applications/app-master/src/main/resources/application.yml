@@ -16,4 +16,4 @@ spring:
     enabled: false
 
 microservice:
-  uriDb: ${MONGO_URI:mongodb://localhost:27017/game-events}
+  uriDb: ${MONGO_URI:mongodb://userCore:MongoDBPassword@localhost:27017/cardgame}

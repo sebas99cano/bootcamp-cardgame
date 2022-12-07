@@ -1,12 +1,10 @@
 package org.example.cardgame.application.command.handle.event;
 
 
-import org.example.cardgame.domain.events.RondaTerminada;
 import org.example.cardgame.domain.events.TableroCreado;
 import org.example.cardgame.generic.BusinessService;
 import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.IntegrationHandle;
-import org.example.cardgame.usecase.usecase.DeterminarGanadorUseCase;
 import org.example.cardgame.usecase.usecase.RepartirCartasUseCase;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;

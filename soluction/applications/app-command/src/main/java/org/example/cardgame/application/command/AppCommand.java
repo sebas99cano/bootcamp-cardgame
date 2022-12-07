@@ -1,49 +1,39 @@
 package org.example.cardgame.application.command;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.reactivestreams.client.MongoClient;
-import com.mongodb.reactivestreams.client.MongoClients;
-import com.rabbitmq.client.ConnectionFactory;
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.beans.factory.annotation.Value;
+import com.rabbitmq.client.Connection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
-import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.mongo.MongoReactiveDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
+import reactor.core.publisher.Mono;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.util.Objects;
 
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+        MongoReactiveAutoConfiguration.class,
+        MongoReactiveDataAutoConfiguration.class,
+        MongoAutoConfiguration.class,
+        MongoDataAutoConfiguration.class
+})
 public class AppCommand {
+    private final Mono<Connection> connectionMono;
+
+    public AppCommand(Mono<Connection> connectionMono) {
+        this.connectionMono = connectionMono;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(AppCommand.class, args);
     }
 
 
-    @Bean
-    public AmqpAdmin amqpAdmin(ConfigProperties configProperties){
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(URI.create(configProperties.getUriBus()));
-        return new RabbitAdmin(connectionFactory);
-    }
-
-    @Bean
-    public ReactiveMongoDatabaseFactory reactiveMongoDatabaseFactory(ConfigProperties configProperties) {
-         return new SimpleReactiveMongoDatabaseFactory(new ConnectionString(configProperties.getUriDb()));
-    }
-
-    @Bean
-    public ConnectionFactory connectionFactory(ConfigProperties configProperties) throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.useNio();
-        connectionFactory.setUri(configProperties.getUriBus());
-        return connectionFactory;
+    @PreDestroy
+    public void close() throws IOException {
+        Objects.requireNonNull(connectionMono.block()).close();
     }
 }

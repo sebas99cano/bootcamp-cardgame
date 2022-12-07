@@ -1,9 +1,3 @@
-## mvn clean package -DskipTests
-## docker build -t xtsofka/cardgame-command .
-## docker run --rm -p 8081:8081 xtsofka/cardgame-command
-## docker run --rm -p 8081:8081 --network host xtsofka/cardgame-command
-## docker push xtsofka/cardgame-command:latest
-
 FROM adoptopenjdk:11-jre-hotspot as builder
 WORKDIR application
 ARG JAR_FILE=target/*.jar

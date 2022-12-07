@@ -1,7 +1,6 @@
 package org.example.cardgame.application.master;
 
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
