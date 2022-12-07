@@ -1,37 +1,32 @@
 package org.example.cardgame.websocket;
 
-import com.rabbitmq.client.ConnectionFactory;
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import com.rabbitmq.client.Connection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import reactor.core.publisher.Mono;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.util.Objects;
 
 @SpringBootApplication
 @EnableWebSocket
 public class AppProxy {
+
+    private final Mono<Connection> connectionMono;
+
+    public AppProxy(Mono<Connection> connectionMono) {
+        this.connectionMono = connectionMono;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(AppProxy.class, args);
     }
 
-    @Bean
-    public AmqpAdmin amqpAdmin(ConfigProperties configProperties){
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(URI.create(configProperties.getUriBus()));
-        return new RabbitAdmin(connectionFactory);
-    }
 
-    @Bean
-    public ConnectionFactory connectionFactory(ConfigProperties configProperties) throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.useNio();
-        connectionFactory.setUri(configProperties.getUriBus());
-        return connectionFactory;
+    @PreDestroy
+    public void close() throws IOException {
+        Objects.requireNonNull(connectionMono.block()).close();
     }
 }

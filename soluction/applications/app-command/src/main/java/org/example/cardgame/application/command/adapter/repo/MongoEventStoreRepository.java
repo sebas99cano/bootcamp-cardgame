@@ -1,8 +1,8 @@
 package org.example.cardgame.application.command.adapter.repo;
 
+import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.EventStoreRepository;
 import org.example.cardgame.generic.StoredEvent;
-import org.example.cardgame.generic.DomainEvent;
 import org.example.cardgame.generic.serialize.EventSerializer;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
